@@ -117,3 +117,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("restartBtn").onclick = () => location.reload();
 });
+#palette div {
+    transition: 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+#palette div:hover {
+    transform: translateY(-3px);
+    filter: brightness(1.2);
+}
