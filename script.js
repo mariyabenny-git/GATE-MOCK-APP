@@ -1,168 +1,142 @@
-let allQuestions=[];
-let selectedQuestions=[];
-let userAnswers=Array(10).fill(null);
+let allQuestions=[], selectedQuestions=[];
+let answers=Array(10).fill(null);
 let marked=Array(10).fill(false);
+let visited=Array(10).fill(false);
 let current=0;
-let totalTime=1800;
-let timer;
+let time=1800;
 
-const screens=document.querySelectorAll(".screen");
-const startBtn=document.getElementById("startBtn");
-const questionEl=document.getElementById("question");
-const optionsEl=document.getElementById("options");
-const progressEl=document.getElementById("progress");
 const timerEl=document.getElementById("timer");
-const palette=document.getElementById("palette");
-const scoreText=document.getElementById("scoreText");
-const analysis=document.getElementById("analysis");
-
-function show(id){
-  screens.forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
 
 fetch("questions.json")
 .then(r=>r.json())
 .then(data=>{
-  for(let sub in data){
-    data[sub].forEach(q=>{
-      q.subject=sub;
-      allQuestions.push(q);
-    });
+  for(let s in data){
+    data[s].forEach(q=>allQuestions.push(q));
   }
 });
 
-function shuffle(a){
-  return [...a].sort(()=>Math.random()-0.5);
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
 }
 
-startBtn.onclick=()=>{
-  current=0;
-  userAnswers=Array(10).fill(null);
-  marked=Array(10).fill(false);
-  totalTime=1800;
-
-  selectedQuestions=shuffle(allQuestions).slice(0,10);
-
+document.getElementById("startBtn").onclick=()=>{
+  selectedQuestions=allQuestions.sort(()=>Math.random()-0.5).slice(0,10);
   show("quiz");
   startTimer();
   loadQ();
 };
 
 function startTimer(){
-  timer=setInterval(()=>{
-    totalTime--;
-    timerEl.textContent=format(totalTime);
-    if(totalTime<=0){
-      clearInterval(timer);
-      finish();
+  setInterval(()=>{
+    time--;
+    let m=Math.floor(time/60);
+    let s=time%60;
+    timerEl.textContent=`${m}:${s}`;
+
+    if(time<300){
+      timerEl.style.color="red";
     }
+
+    if(time<=0) finish();
   },1000);
 }
 
-function format(s){
-  let m=Math.floor(s/60);
-  let sec=s%60;
-  return `${m}:${sec<10?"0":""}${sec}`;
-}
-
 function loadQ(){
+  visited[current]=true;
   let q=selectedQuestions[current];
-  questionEl.textContent=q.question;
-  progressEl.textContent=`Q ${current+1}/10`;
 
-  optionsEl.innerHTML="";
+  document.getElementById("question").textContent=q.question;
 
-  q.options.forEach((opt,i)=>{
-    let div=document.createElement("div");
-    div.className="option";
-    div.textContent=opt;
-
-    if(userAnswers[current]===i){
-      div.classList.add("selected");
-    }
-
-    div.onclick=()=>{
-      userAnswers[current]=i;
-      loadQ();
-      loadPalette();
-    };
-
-    optionsEl.appendChild(div);
+  let optHTML="";
+  q.options.forEach((o,i)=>{
+    optHTML+=`<div class="option" onclick="select(${i})">${o}</div>`;
   });
 
-  loadPalette();
+  document.getElementById("options").innerHTML=optHTML;
+
+  updatePalette();
 }
 
-function loadPalette(){
-  palette.innerHTML="";
+function select(i){
+  answers[current]=i;
+  loadQ();
+}
+
+function updatePalette(){
+  let html="";
   for(let i=0;i<10;i++){
-    let box=document.createElement("div");
-    box.textContent=i+1;
+    let cls="gray";
 
-    if(marked[i]) box.classList.add("marked");
-    else if(userAnswers[i]!=null) box.classList.add("answered");
-    else box.classList.add("not-answered");
+    if(marked[i]) cls="purple";
+    else if(answers[i]!=null) cls="green";
+    else if(visited[i]) cls="red";
 
-    box.onclick=()=>{
-      current=i;
-      loadQ();
-    };
-
-    palette.appendChild(box);
+    html+=`<div class="${cls}" onclick="go(${i})">${i+1}</div>`;
   }
+  document.getElementById("palette").innerHTML=html;
 }
 
-document.getElementById("nextBtn").onclick=()=>{
-  if(current<9){current++; loadQ();}
-};
+function go(i){ current=i; loadQ(); }
 
-document.getElementById("prevBtn").onclick=()=>{
-  if(current>0){current--; loadQ();}
-};
-
-document.getElementById("markBtn").onclick=()=>{
-  marked[current]=!marked[current];
-  loadPalette();
-};
+document.getElementById("nextBtn").onclick=()=>{ if(current<9){current++; loadQ();}};
+document.getElementById("prevBtn").onclick=()=>{ if(current>0){current--; loadQ();}};
+document.getElementById("markBtn").onclick=()=>{ marked[current]=!marked[current]; updatePalette(); };
 
 document.getElementById("submitBtn").onclick=finish;
 
 function finish(){
-  clearInterval(timer);
-
-  let score=0, correct=0, attempted=0;
-  let subjectStats={};
-
-  selectedQuestions.forEach((q,i)=>{
-    if(userAnswers[i]!=null){
-      attempted++;
-
-      if(userAnswers[i]===q.correctAnswer){
-        score+=q.marks;
-        correct++;
-      }else{
-        score-=q.marks*0.33;
-      }
-
-      if(!subjectStats[q.subject]){
-        subjectStats[q.subject]={c:0,t:0};
-      }
-
-      subjectStats[q.subject].t++;
-      if(userAnswers[i]===q.correctAnswer){
-        subjectStats[q.subject].c++;
-      }
-    }
-  });
-
-  let acc=attempted?((correct/attempted)*100).toFixed(1):0;
-
   show("result");
 
-  scoreText.innerHTML=`
-    Score: ${score.toFixed(2)} <br>
-    Accuracy: ${acc}% <br>
-    Attempted: ${attempted}/10
-  `;
+  let correct=0, wrong=0, skipped=0;
+
+  selectedQuestions.forEach((q,i)=>{
+    if(answers[i]==null) skipped++;
+    else if(answers[i]==q.correctAnswer) correct++;
+    else wrong++;
+  });
+
+  let score=correct;
+
+  document.getElementById("scoreText").textContent=`Score: ${score}`;
+
+  drawCircle(score);
+  drawDonut(correct,wrong,skipped);
+  drawBar(score);
+}
+
+/* SVG CIRCLE */
+function drawCircle(score){
+  let percent=score*10;
+  let offset=314-(314*percent/100);
+  document.getElementById("progressCircle").style.strokeDashoffset=offset;
+}
+
+/* DONUT */
+function drawDonut(c,w,s){
+  let ctx=document.getElementById("donutChart").getContext("2d");
+  let data=[c,w,s];
+  let total=data.reduce((a,b)=>a+b,0);
+  let start=0;
+
+  data.forEach(val=>{
+    let angle=(val/total)*Math.PI*2;
+    ctx.beginPath();
+    ctx.moveTo(100,100);
+    ctx.arc(100,100,80,start,start+angle);
+    ctx.fill();
+    start+=angle;
+  });
+}
+
+/* BAR */
+function drawBar(score){
+  let ctx=document.getElementById("barChart").getContext("2d");
+  let history=JSON.parse(localStorage.getItem("scores"))||[];
+  history.push(score);
+  localStorage.setItem("scores",JSON.stringify(history));
+
+  history.forEach((s,i)=>{
+    ctx.fillRect(i*30,150-s*10,20,s*10);
+  });
 }
