@@ -17,45 +17,43 @@
       "correctAnswer": 3,
       "marks": 1,
       "explanation": "Preemption is a way to break deadlock, not a condition for it."
+    },
+    {
+      "id": 4,
+      "subject": "OS",
+      "question": "Which of the following is NOT a necessary condition for deadlock?",
+      "options": ["Mutual Exclusion", "No Preemption", "Hold and Wait", "Preemption"],
+      "correctAnswer": 3,
+      "marks": 1,
+      "explanation": "Preemption is a way to break deadlock, not a condition for it."
+    },
+    {
+      "id": 5,
+      "subject": "OS",
+      "question": "Which CPU scheduling algorithm can lead to starvation?",
+      "options": ["Round Robin", "First Come First Served", "Shortest Job Next", "None of these"],
+      "correctAnswer": 2,
+      "marks": 2,
+      "explanation": "SJN can cause starvation if short jobs keep arriving, preventing long jobs from executing."
+    },
+    {
+      "id": 6,
+      "subject": "DBMS",
+      "question": "Which normal form deals with 'Transitive Dependency'?",
+      "options": ["1NF", "2NF", "3NF", "BCNF"],
+      "correctAnswer": 2,
+      "marks": 1,
+      "explanation": "3NF requires that no non-prime attribute is transitively dependent on the primary key."
+    },
+    {
+      "id": 7,
+      "subject": "DBMS",
+      "question": "What does the 'I' in ACID properties stand for?",
+      "options": ["Index", "Inconsistency", "Isolation", "Integration"],
+      "correctAnswer": 2,
+      "marks": 1,
+      "explanation": "Isolation ensures that concurrent execution of transactions leaves the database in the same state as if they were executed sequentially."
     }
-  
-  {
-    "id": 4,
-    "subject": "OS",
-    "question": "Which of the following is NOT a necessary condition for deadlock?",
-    "options": ["Mutual Exclusion", "No Preemption", "Hold and Wait", "Preemption"],
-    "correctAnswer": 3,
-    "marks": 1,
-    "explanation": "Preemption is a way to break deadlock, not a condition for it."
-  },
-  {
-    "id": 5,
-    "subject": "OS",
-    "question": "Which CPU scheduling algorithm can lead to starvation?",
-    "options": ["Round Robin", "First Come First Served", "Shortest Job Next", "None of these"],
-    "correctAnswer": 2,
-    "marks": 2,
-    "explanation": "SJN can cause starvation if short jobs keep arriving, preventing long jobs from executing."
-  }
-
-  {
-    "id": 6,
-    "subject": "DBMS",
-    "question": "Which normal form deals with 'Transitive Dependency'?",
-    "options": ["1NF", "2NF", "3NF", "BCNF"],
-    "correctAnswer": 2,
-    "marks": 1,
-    "explanation": "3NF requires that no non-prime attribute is transitively dependent on the primary key."
-  },
-  {
-    "id": 7,
-    "subject": "DBMS",
-    "question": "What does the 'I' in ACID properties stand for?",
-    "options": ["Index", "Inconsistency", "Isolation", "Integration"],
-    "correctAnswer": 2,
-    "marks": 1,
-    "explanation": "Isolation ensures that concurrent execution of transactions leaves the database in the same state as if they were executed sequentially."
-  }
   ]
 }
 
