@@ -1,68 +1,86 @@
-let allQuestions=[], selectedQuestions=[];
+let allQuestions=[];
+let selectedQuestions=[];
 let answers=Array(10).fill(null);
 let marked=Array(10).fill(false);
 let visited=Array(10).fill(false);
 let current=0;
 let time=1800;
+let timer;
 
 const timerEl=document.getElementById("timer");
+const startBtn=document.getElementById("startBtn");
 
+/* LOAD QUESTIONS */
 fetch("questions.json")
-.then(r=>r.json())
+.then(res=>res.json())
 .then(data=>{
-  for(let s in data){
-    data[s].forEach(q=>allQuestions.push(q));
+  if(data.questions){
+    allQuestions=data.questions;
+  }else{
+    for(let sub in data){
+      data[sub].forEach(q=>allQuestions.push(q));
+    }
   }
+  console.log("Questions Loaded:", allQuestions.length);
 });
 
+/* SCREEN SWITCH */
 function show(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-document.getElementById("startBtn").onclick=()=>{
+/* START */
+startBtn.onclick=()=>{
+  if(allQuestions.length===0){
+    alert("Questions not loaded!");
+    return;
+  }
+
   selectedQuestions=allQuestions.sort(()=>Math.random()-0.5).slice(0,10);
   show("quiz");
   startTimer();
   loadQ();
 };
 
+/* TIMER */
 function startTimer(){
-  setInterval(()=>{
+  timer=setInterval(()=>{
     time--;
     let m=Math.floor(time/60);
     let s=time%60;
-    timerEl.textContent=`${m}:${s}`;
+    timerEl.textContent=`${m}:${s<10?"0":""}${s}`;
 
-    if(time<300){
-      timerEl.style.color="red";
+    if(time<=0){
+      clearInterval(timer);
+      finish();
     }
-
-    if(time<=0) finish();
   },1000);
 }
 
+/* LOAD QUESTION */
 function loadQ(){
   visited[current]=true;
   let q=selectedQuestions[current];
 
   document.getElementById("question").textContent=q.question;
 
-  let optHTML="";
-  q.options.forEach((o,i)=>{
-    optHTML+=`<div class="option" onclick="select(${i})">${o}</div>`;
+  let html="";
+  q.options.forEach((opt,i)=>{
+    html+=`<div class="option ${answers[current]===i?'selected':''}" onclick="select(${i})">${opt}</div>`;
   });
 
-  document.getElementById("options").innerHTML=optHTML;
-
+  document.getElementById("options").innerHTML=html;
   updatePalette();
 }
 
+/* SELECT */
 function select(i){
   answers[current]=i;
   loadQ();
 }
 
+/* PALETTE */
 function updatePalette(){
   let html="";
   for(let i=0;i<10;i++){
@@ -77,66 +95,24 @@ function updatePalette(){
   document.getElementById("palette").innerHTML=html;
 }
 
+/* NAV */
 function go(i){ current=i; loadQ(); }
 
 document.getElementById("nextBtn").onclick=()=>{ if(current<9){current++; loadQ();}};
 document.getElementById("prevBtn").onclick=()=>{ if(current>0){current--; loadQ();}};
-document.getElementById("markBtn").onclick=()=>{ marked[current]=!marked[current]; updatePalette(); };
+document.getElementById("markBtn").onclick=()=>{ marked[current]=!marked[current]; updatePalette();};
 
+/* FINISH */
 document.getElementById("submitBtn").onclick=finish;
 
 function finish(){
+  clearInterval(timer);
   show("result");
 
-  let correct=0, wrong=0, skipped=0;
-
+  let correct=0;
   selectedQuestions.forEach((q,i)=>{
-    if(answers[i]==null) skipped++;
-    else if(answers[i]==q.correctAnswer) correct++;
-    else wrong++;
+    if(answers[i]===q.correctAnswer) correct++;
   });
 
-  let score=correct;
-
-  document.getElementById("scoreText").textContent=`Score: ${score}`;
-
-  drawCircle(score);
-  drawDonut(correct,wrong,skipped);
-  drawBar(score);
-}
-
-/* SVG CIRCLE */
-function drawCircle(score){
-  let percent=score*10;
-  let offset=314-(314*percent/100);
-  document.getElementById("progressCircle").style.strokeDashoffset=offset;
-}
-
-/* DONUT */
-function drawDonut(c,w,s){
-  let ctx=document.getElementById("donutChart").getContext("2d");
-  let data=[c,w,s];
-  let total=data.reduce((a,b)=>a+b,0);
-  let start=0;
-
-  data.forEach(val=>{
-    let angle=(val/total)*Math.PI*2;
-    ctx.beginPath();
-    ctx.moveTo(100,100);
-    ctx.arc(100,100,80,start,start+angle);
-    ctx.fill();
-    start+=angle;
-  });
-}
-
-/* BAR */
-function drawBar(score){
-  let ctx=document.getElementById("barChart").getContext("2d");
-  let history=JSON.parse(localStorage.getItem("scores"))||[];
-  history.push(score);
-  localStorage.setItem("scores",JSON.stringify(history));
-
-  history.forEach((s,i)=>{
-    ctx.fillRect(i*30,150-s*10,20,s*10);
-  });
+  document.getElementById("scoreText").textContent=`Score: ${correct}/10`;
 }
