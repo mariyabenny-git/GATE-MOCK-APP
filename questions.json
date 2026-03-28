@@ -1,19 +1,12 @@
 {
-  "Engineering_Maths": [
-    {"id":1, "question":"Question text here...", "options":["A","B","C","D"], "correctAnswer":0, "marks":2},
-    {"id":2, "question":"Next math question...", "options":["A","B","C","D"], "correctAnswer":1, "marks":1}
-    /* Add 18 more here */
+  "DSA": [
+    {"question":"Time complexity of merge sort?","options":["O(n)","O(n log n)","O(log n)","O(n^2)"],"correctAnswer":1,"marks":2},
+    {"question":"Worst case of QuickSort?","options":["O(n)","O(n^2)","O(log n)","O(n log n)"],"correctAnswer":1,"marks":2}
   ],
-  "Digital_Logic": [
-    {"id":21, "question":"Question about Gates...", "options":["A","B","C","D"], "correctAnswer":2, "marks":1}
-    /* Add 19 more here */
+  "OS": [
+    {"question":"Condition for Deadlock?","options":["Mutual Exclusion","Circular Wait","No Preemption","All of these"],"correctAnswer":3,"marks":2}
   ],
-  "Computer_Organization": [],
-  "Programming_Data_Structures": [],
-  "Algorithms": [],
-  "Theory_of_Computation": [],
-  "Compiler_Design": [],
-  "Operating_Systems": [],
-  "Databases": [],
-  "Computer_Networks": []
+  "NETWORKS": [
+    {"question":"Layer 4 of OSI?","options":["Network","Data Link","Transport","Session"],"correctAnswer":2,"marks":1}
+  ]
 }
