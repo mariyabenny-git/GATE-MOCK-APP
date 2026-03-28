@@ -9,15 +9,15 @@
 <body>
     <header class="header">
         <h2>GATE MOCK <span style="color:var(--primary)">PRO</span></h2>
-        <div id="timer">30:00</div>
-        <button id="exitBtn" class="nav-btn">Exit</button>
+        <div id="timer">10:00</div>
+        <button id="exitBtn">Exit</button>
     </header>
 
     <main id="app">
         <section id="start" class="screen active">
             <div class="card center">
-                <h1>Focus Mode Exam</h1>
-                <p style="color:#94a3b8; margin-bottom: 20px;">200 Questions Available | 10 Random per Session</p>
+                <h1>GATE Mock Session</h1>
+                <p style="color:#94a3b8; margin-bottom: 20px;">10 Randomized Questions | 10 Minutes | Focus Mode</p>
                 <button id="startBtn">Start Test</button>
             </div>
         </section>
@@ -26,24 +26,24 @@
             <div class="quiz-container">
                 <div class="main-content">
                     <div class="card">
-                        <div class="q-meta">
-                            <span id="progress"></span>
-                            <span id="subject-tag"></span>
-                        </div>
+                        <div class="q-meta"><span id="progress"></span><span id="subject-tag"></span></div>
                         <h2 id="question">Loading...</h2>
                         <div id="options"></div>
-                        <div id="feedback-area"></div>
+                        <div id="solution-box">
+                            <h4 style="color:var(--primary); margin-bottom:5px;">Detailed Solution</h4>
+                            <p id="solution-text" style="font-size:0.9rem; color:#cbd5e1;"></p>
+                        </div>
                     </div>
                 </div>
                 <aside class="sidebar">
                     <h3>Status Palette</h3>
                     <div id="palette"></div>
-                    <button id="submitBtn" style="background:#22c55e; margin-top: 30px;">Submit Exam</button>
+                    <button id="markBtn" style="background:#6366f1">Review Later</button>
+                    <button id="submitBtn" style="background:#22c55e; margin-top:10px;">Submit Exam</button>
                 </aside>
             </div>
             <div class="mobile-nav">
                 <button id="prevBtn">Prev</button>
-                <button id="markBtn">Mark</button>
                 <button id="nextBtn">Next</button>
             </div>
         </section>
@@ -51,14 +51,12 @@
         <section id="result" class="screen">
             <div class="card center">
                 <h2>Analysis Complete</h2>
-                <h1 id="scoreText" style="font-size: 3rem; margin: 10px 0;"></h1>
-                <p id="rankText" style="font-weight: bold; color: var(--primary);"></p>
+                <h1 id="scoreText"></h1>
                 <div id="analysis" class="stats-grid"></div>
                 <button id="restartBtn">Take New Mock</button>
             </div>
         </section>
     </main>
-
     <script src="script.js"></script>
 </body>
 </html>
