@@ -1,12 +1,61 @@
 {
-  "DSA": [
-    {"question":"Time complexity of merge sort?","options":["O(n)","O(n log n)","O(log n)","O(n^2)"],"correctAnswer":1,"marks":2},
-    {"question":"Worst case of QuickSort?","options":["O(n)","O(n^2)","O(log n)","O(n log n)"],"correctAnswer":1,"marks":2}
-  ],
-  "OS": [
-    {"question":"Condition for Deadlock?","options":["Mutual Exclusion","Circular Wait","No Preemption","All of these"],"correctAnswer":3,"marks":2}
-  ],
-  "NETWORKS": [
-    {"question":"Layer 4 of OSI?","options":["Network","Data Link","Transport","Session"],"correctAnswer":2,"marks":1}
+  "questions": [
+    {
+      "id": 1,
+      "subject": "DSA",
+      "question": "What is the worst-case time complexity of Quick Sort?",
+      "options": ["O(n log n)", "O(n)", "O(n^2)", "O(log n)"],
+      "correctAnswer": 2,
+      "marks": 2,
+      "explanation": "Quick Sort degrades to O(n^2) when the pivot is consistently the smallest or largest element."
+    },
+    {
+      "id": 2,
+      "subject": "OS",
+      "question": "Which of the following is NOT a necessary condition for deadlock?",
+      "options": ["Mutual Exclusion", "No Preemption", "Hold and Wait", "Preemption"],
+      "correctAnswer": 3,
+      "marks": 1,
+      "explanation": "Preemption is a way to break deadlock, not a condition for it."
+    }
+  
+  {
+    "id": 4,
+    "subject": "OS",
+    "question": "Which of the following is NOT a necessary condition for deadlock?",
+    "options": ["Mutual Exclusion", "No Preemption", "Hold and Wait", "Preemption"],
+    "correctAnswer": 3,
+    "marks": 1,
+    "explanation": "Preemption is a way to break deadlock, not a condition for it."
+  },
+  {
+    "id": 5,
+    "subject": "OS",
+    "question": "Which CPU scheduling algorithm can lead to starvation?",
+    "options": ["Round Robin", "First Come First Served", "Shortest Job Next", "None of these"],
+    "correctAnswer": 2,
+    "marks": 2,
+    "explanation": "SJN can cause starvation if short jobs keep arriving, preventing long jobs from executing."
+  }
+
+  {
+    "id": 6,
+    "subject": "DBMS",
+    "question": "Which normal form deals with 'Transitive Dependency'?",
+    "options": ["1NF", "2NF", "3NF", "BCNF"],
+    "correctAnswer": 2,
+    "marks": 1,
+    "explanation": "3NF requires that no non-prime attribute is transitively dependent on the primary key."
+  },
+  {
+    "id": 7,
+    "subject": "DBMS",
+    "question": "What does the 'I' in ACID properties stand for?",
+    "options": ["Index", "Inconsistency", "Isolation", "Integration"],
+    "correctAnswer": 2,
+    "marks": 1,
+    "explanation": "Isolation ensures that concurrent execution of transactions leaves the database in the same state as if they were executed sequentially."
+  }
   ]
 }
+
