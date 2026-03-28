@@ -10,39 +10,50 @@
 
 <div id="app">
 
+<!-- START -->
 <section id="start" class="screen active">
   <div class="card center">
-    <h1>GATE MOCK</h1>
-    <p>AI / CSE / IT Practice</p>
+    <h1>GATE MOCK TEST</h1>
+    <p>Focus Mode Practice</p>
     <button id="startBtn">Start Test</button>
   </div>
 </section>
 
+<!-- QUIZ -->
 <section id="quiz" class="screen">
-  <div class="card">
 
-    <div class="top">
-      <span id="progress"></span>
-      <span id="timer"></span>
+  <!-- LEFT PANEL -->
+  <div class="main-panel">
+
+    <div class="top-bar">
+      <div id="progress"></div>
+      <div id="timer"></div>
     </div>
 
-    <h2 id="question"></h2>
-
-    <div id="options"></div>
-
-    <div id="palette"></div>
-
-    <div class="nav">
-      <button id="prevBtn">Prev</button>
-      <button id="markBtn">Mark</button>
-      <button id="nextBtn">Next</button>
+    <div class="question-box">
+      <h2 id="question"></h2>
+      <div id="options"></div>
     </div>
-
-    <button id="submitBtn">Submit</button>
 
   </div>
+
+  <!-- RIGHT PANEL (DESKTOP) -->
+  <div class="side-panel">
+    <h3>Questions</h3>
+    <div id="palette"></div>
+    <button id="submitBtn">Submit Test</button>
+  </div>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav">
+    <button id="prevBtn">Prev</button>
+    <button id="markBtn">Mark</button>
+    <button id="nextBtn">Next</button>
+  </div>
+
 </section>
 
+<!-- RESULT -->
 <section id="result" class="screen">
   <div class="card center">
     <h2>Result</h2>
