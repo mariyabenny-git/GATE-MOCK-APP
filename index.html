@@ -1,68 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GATE Mock Pro | Focus Mode</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GATE Mock Pro</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <header class="app-header">
-        <div class="logo">GATE<span>PRO</span></div>
-        <div id="timer" class="timer-box">30:00</div>
-        <button id="exitBtn" class="danger-btn">Exit</button>
-    </header>
 
-    <main id="app-container">
-        <section id="start-screen" class="screen active">
-            <div class="glass-card center">
-                <h1>GATE Mock Session</h1>
-                <p>10 Randomized Questions | 30 Minutes | Focus Mode</p>
-                <button id="startBtn" class="primary-btn" disabled>Loading Questions...</button>
-            </div>
-        </section>
+<header class="header">
+  <h2>GATE MOCK PRO</h2>
+  <div id="timer">30:00</div>
+  <button id="exitBtn">Exit</button>
+</header>
 
-        <section id="quiz-screen" class="screen">
-            <div class="quiz-layout">
-                <div class="question-area">
-                    <div class="glass-card q-card">
-                        <div class="q-header">
-                            <span id="q-progress"></span>
-                            <span id="q-subject"></span>
-                        </div>
-                        <h2 id="q-text"></h2>
-                        <div id="q-options" class="options-grid"></div>
-                    </div>
-                </div>
-                
-                <aside class="palette-sidebar">
-                    <h3>Question Palette</h3>
-                    <div id="palette-grid"></div>
-                    <div class="sidebar-footer">
-                        <button id="submitBtn" class="success-btn">Submit Exam</button>
-                    </div>
-                </aside>
-            </div>
+<main id="app">
 
-            <div class="mobile-actions">
-                <button id="prevBtn">← Previous</button>
-                <button id="markBtn">Mark</button>
-                <button id="nextBtn">Next →</button>
-            </div>
-        </section>
+<section id="start" class="screen active">
+  <div class="card center">
+    <h1>Focus Mode Exam</h1>
+    <button id="startBtn">Start Test</button>
+  </div>
+</section>
 
-        <section id="result-screen" class="screen">
-            <div class="glass-card center">
-                <div class="result-header">
-                    <h2>Exam Completed</h2>
-                    <div id="score-circle" class="score-display">0%</div>
-                </div>
-                <div id="analysis-report" class="report-box"></div>
-                <button id="restartBtn" class="primary-btn">New Mock Test</button>
-            </div>
-        </section>
-    </main>
+<section id="quiz" class="screen">
+  <div class="main">
+    <div class="card">
+      <p id="progress"></p>
+      <h2 id="question">Loading...</h2>
+      <div id="options"></div>
+    </div>
+  </div>
 
-    <script src="script.js"></script>
+  <aside class="sidebar">
+    <div id="palette"></div>
+    <button id="submitBtn">Submit</button>
+  </aside>
+
+  <div class="mobile-nav">
+    <button id="prevBtn">Prev</button>
+    <button id="markBtn">Mark</button>
+    <button id="nextBtn">Next</button>
+  </div>
+</section>
+
+<section id="result" class="screen">
+  <div class="card center">
+    <h2>Result</h2>
+    <p id="scoreText"></p>
+    <p id="rankText"></p>
+    <div id="analysis"></div>
+    <button id="restartBtn">Restart</button>
+  </div>
+</section>
+
+</main>
+
+<script defer src="script.js"></script>
 </body>
 </html>
