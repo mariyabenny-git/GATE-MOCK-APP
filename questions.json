@@ -6,54 +6,89 @@
       "question": "What is the worst-case time complexity of Quick Sort?",
       "options": ["O(n log n)", "O(n)", "O(n^2)", "O(log n)"],
       "correctAnswer": 2,
-      "marks": 2,
-      "explanation": "Quick Sort degrades to O(n^2) when the pivot is consistently the smallest or largest element."
+      "marks": 1,
+      "explanation": "Quick Sort degrades to O(n^2) when the pivot selection is poor, such as picking the first or last element in an already sorted array."
     },
     {
       "id": 2,
       "subject": "OS",
-      "question": "Which of the following is NOT a necessary condition for deadlock?",
-      "options": ["Mutual Exclusion", "No Preemption", "Hold and Wait", "Preemption"],
-      "correctAnswer": 3,
+      "question": "Which CPU scheduling algorithm is strictly non-preemptive?",
+      "options": ["Round Robin", "SRTF", "FCFS", "Priority Scheduling"],
+      "correctAnswer": 2,
       "marks": 1,
-      "explanation": "Preemption is a way to break deadlock, not a condition for it."
+      "explanation": "First-Come-First-Served (FCFS) executes processes in the exact order they arrive and cannot be interrupted until the process finishes."
+    },
+    {
+      "id": 3,
+      "subject": "Digital Logic",
+      "question": "Identify the correct logic gate output for High/High inputs in an AND gate.",
+      "options": ["High", "Low", "Floating", "High-Z"],
+      "correctAnswer": 0,
+      "marks": 1,
+      "explanation": "An AND gate follows the logic that the output is 'High' (1) if and only if all its inputs are 'High'."
     },
     {
       "id": 4,
-      "subject": "OS",
-      "question": "Which of the following is NOT a necessary condition for deadlock?",
-      "options": ["Mutual Exclusion", "No Preemption", "Hold and Wait", "Preemption"],
-      "correctAnswer": 3,
+      "subject": "DBMS",
+      "question": "Which of the following is an ACID property in database transactions?",
+      "options": ["Availability", "Consistency", "Scalability", "Redundancy"],
+      "correctAnswer": 1,
       "marks": 1,
-      "explanation": "Preemption is a way to break deadlock, not a condition for it."
+      "explanation": "ACID stands for Atomicity, Consistency, Isolation, and Durability. Consistency ensures the database remains in a valid state."
     },
     {
       "id": 5,
-      "subject": "OS",
-      "question": "Which CPU scheduling algorithm can lead to starvation?",
-      "options": ["Round Robin", "First Come First Served", "Shortest Job Next", "None of these"],
+      "subject": "Networks",
+      "question": "Which OSI layer is responsible for IP addressing and routing?",
+      "options": ["Data Link", "Physical", "Network", "Transport"],
       "correctAnswer": 2,
-      "marks": 2,
-      "explanation": "SJN can cause starvation if short jobs keep arriving, preventing long jobs from executing."
+      "marks": 1,
+      "explanation": "The Network layer (Layer 3) handles logical addressing (IP) and determines the best physical path for data."
     },
     {
       "id": 6,
-      "subject": "DBMS",
-      "question": "Which normal form deals with 'Transitive Dependency'?",
-      "options": ["1NF", "2NF", "3NF", "BCNF"],
-      "correctAnswer": 2,
+      "subject": "Maths",
+      "question": "The sum of a square matrix A and its transpose A' is always?",
+      "options": ["Symmetric", "Identity", "Diagonal", "Skew-Symmetric"],
+      "correctAnswer": 0,
       "marks": 1,
-      "explanation": "3NF requires that no non-prime attribute is transitively dependent on the primary key."
+      "explanation": "By definition, a matrix B is symmetric if B = B'. Since (A+A')' = A'+A, the result is always symmetric."
     },
     {
       "id": 7,
-      "subject": "DBMS",
-      "question": "What does the 'I' in ACID properties stand for?",
-      "options": ["Index", "Inconsistency", "Isolation", "Integration"],
+      "subject": "TOC",
+      "question": "Regular languages are closed under which of the following operations?",
+      "options": ["Union", "Intersection", "Kleene Star", "All of these"],
+      "correctAnswer": 3,
+      "marks": 1,
+      "explanation": "Regular languages have strong closure properties, meaning the result of these operations on regular languages is also a regular language."
+    },
+    {
+      "id": 8,
+      "subject": "COA",
+      "question": "Which type of memory offers the fastest access time in a computer?",
+      "options": ["RAM", "Cache", "Registers", "Hard Disk"],
       "correctAnswer": 2,
       "marks": 1,
-      "explanation": "Isolation ensures that concurrent execution of transactions leaves the database in the same state as if they were executed sequentially."
+      "explanation": "Registers are located directly inside the CPU, providing the lowest latency and highest speed compared to other memory levels."
+    },
+    {
+      "id": 9,
+      "subject": "Compiler",
+      "question": "Which phase of the compiler is responsible for creating a Syntax Tree?",
+      "options": ["Lexical Analysis", "Syntax Analysis", "Semantic Analysis", "Code Generation"],
+      "correctAnswer": 1,
+      "marks": 1,
+      "explanation": "The Syntax Analysis phase (Parsing) takes tokens from the lexical analyzer and organizes them into a hierarchical tree structure."
+    },
+    {
+      "id": 10,
+      "subject": "Aptitude",
+      "question": "Find the next term in the series: 2, 6, 12, 20, ...",
+      "options": ["24", "28", "30", "36"],
+      "correctAnswer": 2,
+      "marks": 1,
+      "explanation": "The pattern involves adding consecutive even numbers: 2+4=6, 6+6=12, 12+8=20. The next step is 20+10=30."
     }
   ]
 }
-
