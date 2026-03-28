@@ -6,56 +6,78 @@
 <title>GATE Mock Pro</title>
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
+<!-- HEADER -->
 <header class="header">
   <h2>GATE MOCK</h2>
   <div id="timer">30:00</div>
-  <button onclick="location.reload()">Exit</button>
+  <button id="exitBtn">Exit</button>
 </header>
 
-<div id="app">
+<!-- APP ROOT -->
+<main id="app">
 
-<section id="start" class="screen active">
-  <div class="card center">
-    <h1>Focus Mode Exam</h1>
-    <button id="startBtn">Start Test</button>
-  </div>
-</section>
-
-<section id="quiz" class="screen">
-
-  <div class="main">
-    <div class="card">
-      <h2 id="question">Loading...</h2>
-      <div id="options"></div>
+  <!-- START SCREEN -->
+  <section id="start" class="screen active">
+    <div class="card center">
+      <h1>Focus Mode Exam</h1>
+      <p>10 Questions • 30 Minutes</p>
+      <button id="startBtn">Start Test</button>
     </div>
-  </div>
+  </section>
 
-  <div class="sidebar">
-    <h3>Palette</h3>
-    <div id="palette"></div>
-    <button id="submitBtn">Submit</button>
-  </div>
+  <!-- QUIZ SCREEN -->
+  <section id="quiz" class="screen">
 
-  <div class="mobile-nav">
-    <button id="prevBtn">Prev</button>
-    <button id="markBtn">Mark</button>
-    <button id="nextBtn">Next</button>
-  </div>
+    <!-- MAIN AREA -->
+    <div class="main">
 
-</section>
+      <div class="card">
 
-<section id="result" class="screen">
-  <div class="card center">
-    <h2>Result</h2>
-    <p id="scoreText"></p>
-    <button onclick="location.reload()">Restart</button>
-  </div>
-</section>
+        <!-- TOP INFO -->
+        <div class="top-bar">
+          <span id="progress">Q1 / 10</span>
+        </div>
 
-</div>
+        <!-- QUESTION -->
+        <h2 id="question">Click Start Test</h2>
+
+        <!-- OPTIONS -->
+        <div id="options"></div>
+
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <h3>Question Palette</h3>
+      <div id="palette"></div>
+      <button id="submitBtn">Submit Test</button>
+    </aside>
+
+    <!-- MOBILE NAV -->
+    <div class="mobile-nav">
+      <button id="prevBtn">Prev</button>
+      <button id="markBtn">Mark</button>
+      <button id="nextBtn">Next</button>
+    </div>
+
+  </section>
+
+  <!-- RESULT SCREEN -->
+  <section id="result" class="screen">
+    <div class="card center">
+      <h2>Test Result</h2>
+      <p id="scoreText">Your score will appear here</p>
+      <button id="restartBtn">Restart</button>
+    </div>
+  </section>
+
+</main>
 
 <script src="script.js"></script>
+
 </body>
 </html>
