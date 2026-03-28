@@ -1,89 +1,128 @@
-body{
-  margin:0;
-  font-family:system-ui;
-  background:#0f172a;
-  color:white;
+:root {
+    --primary: #6c63ff;
+    --bg: #0f172a;
+    --glass: rgba(255, 255, 255, 0.05);
+    --border: rgba(255, 255, 255, 0.1);
 }
 
-.header{
-  display:flex;
-  justify-content:space-between;
-  padding:10px 20px;
-  background:#020617;
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: white;
+    overflow-x: hidden;
 }
 
-.screen{ display:none; }
-.screen.active{ display:flex; }
-
-.center{ margin:auto; }
-
-#quiz{ display:flex; height:90vh; }
-
-.main{
-  flex:3;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: #020617;
+    border-bottom: 1px solid var(--border);
 }
 
-.sidebar{
-  flex:1;
-  padding:10px;
-  background:rgba(255,255,255,0.05);
+.screen { display: none; width: 100%; min-height: 90vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+.quiz-container {
+    display: flex;
+    flex: 1;
+    width: 100%;
 }
 
-.card{
-  padding:20px;
-  border-radius:15px;
-  background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(10px);
-  width:90%;
-  max-width:600px;
+.main-content {
+    flex: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
 }
 
-.option{
-  padding:12px;
-  margin:8px 0;
-  border-radius:10px;
-  background:rgba(255,255,255,0.05);
-  cursor:pointer;
+.sidebar {
+    flex: 1;
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-left: 1px solid var(--border);
+    max-width: 300px;
 }
 
-.selected{ border:2px solid #6c63ff; }
-
-#palette{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:6px;
+.card {
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    padding: 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 700px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
 
-.gray{background:#555;}
-.red{background:#e74c3c;}
-.green{background:#2ecc71;}
-.purple{background:#9b59b6;}
+.center { margin: auto; text-align: center; }
 
-button{
-  padding:10px;
-  border:none;
-  border-radius:8px;
-  background:#6c63ff;
-  color:white;
-  width:100%;
-  margin-top:10px;
+.option {
+    padding: 15px;
+    margin: 10px 0;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-.mobile-nav{ display:none; }
+.option:hover { background: rgba(255,255,255,0.08); }
+.option.selected { border-color: var(--primary); background: rgba(108, 99, 255, 0.2); }
 
-@media(max-width:768px){
-  #quiz{ flex-direction:column; }
-  .sidebar{ display:none; }
+#palette {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+}
 
-  .mobile-nav{
-    display:flex;
-    position:fixed;
-    bottom:0;
-    width:100%;
-  }
+#palette div {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
 
-  .mobile-nav button{ flex:1; }
+.gray { background: #334155; }
+.red { background: #ef4444; }
+.green { background: #22c55e; }
+.purple { background: #a855f7; }
+
+button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+button:active { transform: scale(0.95); }
+
+.mobile-nav { display: none; }
+
+@media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main-content { flex: 1; padding-bottom: 80px; }
+    .mobile-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: #020617;
+        padding: 15px;
+        gap: 10px;
+        box-sizing: border-box;
+    }
+    .mobile-nav button { flex: 1; }
 }
