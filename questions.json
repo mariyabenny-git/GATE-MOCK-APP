@@ -3,92 +3,92 @@
     {
       "id": 1,
       "subject": "DSA",
-      "question": "What is the worst-case time complexity of Quick Sort?",
-      "options": ["O(n log n)", "O(n)", "O(n^2)", "O(log n)"],
+      "question": "Which of the following data structures is most efficient for implementing a LIFO (Last-In-First-Out) logic?",
+      "options": ["Queue", "Linked List", "Stack", "Array"],
       "correctAnswer": 2,
       "marks": 1,
-      "explanation": "Quick Sort degrades to O(n^2) when the pivot selection is poor, such as picking the first or last element in an already sorted array."
+      "explanation": "A Stack follows the LIFO principle where the last element added is the first one to be removed. Queues follow FIFO (First-In-First-Out)."
     },
     {
       "id": 2,
-      "subject": "OS",
-      "question": "Which CPU scheduling algorithm is strictly non-preemptive?",
-      "options": ["Round Robin", "SRTF", "FCFS", "Priority Scheduling"],
-      "correctAnswer": 2,
-      "marks": 1,
-      "explanation": "First-Come-First-Served (FCFS) executes processes in the exact order they arrive and cannot be interrupted until the process finishes."
+      "subject": "Operating Systems",
+      "question": "What is the primary purpose of 'Thrashing' in an OS context?",
+      "options": ["High CPU Utility", "Excessive Paging", "Memory Leak", "Process Deadlock"],
+      "correctAnswer": 1,
+      "marks": 2,
+      "explanation": "Thrashing occurs when the system spends more time swapping pages in and out of memory than executing actual instructions, leading to a collapse in performance."
     },
     {
       "id": 3,
-      "subject": "Digital Logic",
-      "question": "Identify the correct logic gate output for High/High inputs in an AND gate.",
-      "options": ["High", "Low", "Floating", "High-Z"],
-      "correctAnswer": 0,
+      "subject": "Computer Networks",
+      "question": "Which layer of the OSI model is responsible for end-to-end communication and error recovery?",
+      "options": ["Network Layer", "Data Link Layer", "Transport Layer", "Physical Layer"],
+      "correctAnswer": 2,
       "marks": 1,
-      "explanation": "An AND gate follows the logic that the output is 'High' (1) if and only if all its inputs are 'High'."
+      "explanation": "The Transport Layer (Layer 4) ensures reliable data transfer through flow control, segmentation, and error correction (e.g., TCP)."
     },
     {
       "id": 4,
       "subject": "DBMS",
-      "question": "Which of the following is an ACID property in database transactions?",
-      "options": ["Availability", "Consistency", "Scalability", "Redundancy"],
-      "correctAnswer": 1,
+      "question": "In a relational database, which constraint ensures that a column cannot have NULL values?",
+      "options": ["UNIQUE", "PRIMARY KEY", "NOT NULL", "CHECK"],
+      "correctAnswer": 2,
       "marks": 1,
-      "explanation": "ACID stands for Atomicity, Consistency, Isolation, and Durability. Consistency ensures the database remains in a valid state."
+      "explanation": "The NOT NULL constraint enforces a column to always contain a value, which means you cannot insert or update a record without adding a value to this column."
     },
     {
       "id": 5,
-      "subject": "Networks",
-      "question": "Which OSI layer is responsible for IP addressing and routing?",
-      "options": ["Data Link", "Physical", "Network", "Transport"],
-      "correctAnswer": 2,
+      "subject": "Digital Logic",
+      "question": "How many select lines are required for a 16-to-1 Multiplexer (MUX)?",
+      "options": ["2", "4", "8", "16"],
+      "correctAnswer": 1,
       "marks": 1,
-      "explanation": "The Network layer (Layer 3) handles logical addressing (IP) and determines the best physical path for data."
+      "explanation": "The number of select lines 'n' for 'm' inputs is determined by 2^n = m. Since 2^4 = 16, 4 select lines are required."
     },
     {
       "id": 6,
-      "subject": "Maths",
-      "question": "The sum of a square matrix A and its transpose A' is always?",
-      "options": ["Symmetric", "Identity", "Diagonal", "Skew-Symmetric"],
-      "correctAnswer": 0,
-      "marks": 1,
-      "explanation": "By definition, a matrix B is symmetric if B = B'. Since (A+A')' = A'+A, the result is always symmetric."
+      "subject": "Theory of Computation",
+      "question": "Which of the following is the most powerful computational model?",
+      "options": ["Finite Automata", "Pushdown Automata", "Turing Machine", "Linear Bounded Automata"],
+      "correctAnswer": 2,
+      "marks": 2,
+      "explanation": "Turing Machines can simulate any algorithmic process and are more powerful than PDA or FA, which have memory limitations."
     },
     {
       "id": 7,
-      "subject": "TOC",
-      "question": "Regular languages are closed under which of the following operations?",
-      "options": ["Union", "Intersection", "Kleene Star", "All of these"],
-      "correctAnswer": 3,
+      "subject": "Algorithms",
+      "question": "What is the time complexity of searching an element in a balanced Binary Search Tree (BST)?",
+      "options": ["O(1)", "O(n)", "O(log n)", "O(n^2)"],
+      "correctAnswer": 2,
       "marks": 1,
-      "explanation": "Regular languages have strong closure properties, meaning the result of these operations on regular languages is also a regular language."
+      "explanation": "In a balanced BST, each comparison eliminates half of the remaining nodes, resulting in logarithmic time complexity."
     },
     {
       "id": 8,
-      "subject": "COA",
-      "question": "Which type of memory offers the fastest access time in a computer?",
-      "options": ["RAM", "Cache", "Registers", "Hard Disk"],
-      "correctAnswer": 2,
+      "subject": "Compiler Design",
+      "question": "Which phase of the compiler is also known as 'Scanner'?",
+      "options": ["Lexical Analysis", "Syntax Analysis", "Semantic Analysis", "Code Optimization"],
+      "correctAnswer": 0,
       "marks": 1,
-      "explanation": "Registers are located directly inside the CPU, providing the lowest latency and highest speed compared to other memory levels."
+      "explanation": "The Lexical Analyzer scans the source code character by character and groups them into meaningful sequences called tokens."
     },
     {
       "id": 9,
-      "subject": "Compiler",
-      "question": "Which phase of the compiler is responsible for creating a Syntax Tree?",
-      "options": ["Lexical Analysis", "Syntax Analysis", "Semantic Analysis", "Code Generation"],
-      "correctAnswer": 1,
+      "subject": "COA",
+      "question": "Which addressing mode is used in the instruction: MOV R1, [2000]?",
+      "options": ["Immediate", "Register", "Direct", "Indirect"],
+      "correctAnswer": 2,
       "marks": 1,
-      "explanation": "The Syntax Analysis phase (Parsing) takes tokens from the lexical analyzer and organizes them into a hierarchical tree structure."
+      "explanation": "In Direct Addressing, the address of the operand is specified directly in the instruction."
     },
     {
       "id": 10,
-      "subject": "Aptitude",
-      "question": "Find the next term in the series: 2, 6, 12, 20, ...",
-      "options": ["24", "28", "30", "36"],
-      "correctAnswer": 2,
+      "subject": "Engineering Maths",
+      "question": "If the determinant of a matrix is zero, the matrix is said to be:",
+      "options": ["Identity", "Singular", "Non-singular", "Orthogonal"],
+      "correctAnswer": 1,
       "marks": 1,
-      "explanation": "The pattern involves adding consecutive even numbers: 2+4=6, 6+6=12, 12+8=20. The next step is 20+10=30."
+      "explanation": "A square matrix is called a Singular matrix if its determinant is 0. Singular matrices do not have an inverse."
     }
   ]
 }
