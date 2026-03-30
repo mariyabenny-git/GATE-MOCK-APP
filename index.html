@@ -8,8 +8,8 @@
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script defer src="script.js"></script>
 
 </head>
 
@@ -23,7 +23,6 @@
 
 <main>
 
-<!-- START -->
 <section id="start" class="screen active">
   <div class="card center">
     <h1>Focus Mode Exam</h1>
@@ -31,7 +30,6 @@
   </div>
 </section>
 
-<!-- QUIZ -->
 <section id="quiz" class="screen">
 
   <div class="quiz-container">
@@ -39,8 +37,9 @@
     <div class="card">
       <p id="progress"></p>
 
-      <div style="display:flex; justify-content:space-between;">
-        <h2 id="question"></h2>
+      <h2 id="question"></h2>
+
+      <div style="text-align:right;">
         <button id="explainBtn">💡</button>
       </div>
 
@@ -63,7 +62,6 @@
 
 </section>
 
-<!-- RESULT -->
 <section id="result" class="screen">
   <div class="card center">
 
@@ -73,8 +71,8 @@
     <p id="rankText"></p>
     <p id="weakText"></p>
 
-    <canvas id="donutChart"></canvas>
-    <canvas id="timeChart"></canvas>
+    <canvas id="donutChart" width="250" height="250"></canvas>
+    <canvas id="timeChart" width="300" height="200"></canvas>
 
     <h3>📘 Golden Points</h3>
     <div id="solutions"></div>
@@ -86,6 +84,5 @@
 
 </main>
 
-<script src="script.js"></script>
 </body>
 </html>
