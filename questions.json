@@ -1,64 +1,126 @@
 {
   "questions": [
+
     {
-      "question": "Which data structure follows LIFO?",
-      "options": ["Queue","Stack","Array","Graph"],
+      "subject": "DSA",
+      "question": "Stack follows?",
+      "options": ["FIFO", "LIFO", "Random", "None"],
       "correctAnswer": 1,
-      "marks": 1
+      "marks": 1,
+      "explanation": "Stack uses LIFO (Last In First Out)."
     },
     {
+      "subject": "DSA",
+      "question": "Queue follows?",
+      "options": ["FIFO", "LIFO", "Random", "None"],
+      "correctAnswer": 0,
+      "marks": 1,
+      "explanation": "Queue uses FIFO (First In First Out)."
+    },
+    {
+      "subject": "OS",
       "question": "Thrashing means?",
-      "options": ["CPU idle","Excess paging","Deadlock","None"],
+      "options": ["CPU idle", "Excess paging", "Deadlock", "None"],
       "correctAnswer": 1,
-      "marks": 2
+      "marks": 2,
+      "explanation": "Thrashing occurs when system spends more time swapping pages."
     },
     {
-      "question": "OSI Layer for reliability?",
-      "options": ["Transport","Network","Data Link","Physical"],
+      "subject": "OS",
+      "question": "Deadlock occurs when?",
+      "options": ["No process", "Circular wait", "Low CPU", "None"],
+      "correctAnswer": 1,
+      "marks": 1,
+      "explanation": "Deadlock happens due to circular wait condition."
+    },
+    {
+      "subject": "CN",
+      "question": "OSI layer for routing?",
+      "options": ["Transport", "Network", "Physical", "Data link"],
+      "correctAnswer": 1,
+      "marks": 1,
+      "explanation": "Network layer handles routing."
+    },
+    {
+      "subject": "CN",
+      "question": "TCP is?",
+      "options": ["Connectionless", "Reliable", "Fast only", "None"],
+      "correctAnswer": 1,
+      "marks": 1,
+      "explanation": "TCP provides reliable communication."
+    },
+    {
+      "subject": "DBMS",
+      "question": "Primary key allows?",
+      "options": ["Null", "Duplicate", "Unique", "None"],
+      "correctAnswer": 2,
+      "marks": 1,
+      "explanation": "Primary key ensures uniqueness."
+    },
+    {
+      "subject": "DBMS",
+      "question": "Normalization removes?",
+      "options": ["Redundancy", "Data", "Tables", "Keys"],
       "correctAnswer": 0,
-      "marks": 1
+      "marks": 1,
+      "explanation": "Normalization reduces redundancy."
     },
     {
-      "question": "NOT NULL ensures?",
-      "options": ["Unique","No null","Check","Key"],
-      "correctAnswer": 1,
-      "marks": 1
-    },
-    {
-      "question": "MUX select lines for 16?",
-      "options": ["2","4","8","16"],
-      "correctAnswer": 1,
-      "marks": 1
-    },
-    {
+      "subject": "TOC",
       "question": "Most powerful model?",
-      "options": ["FA","PDA","TM","LBA"],
+      "options": ["FA", "PDA", "TM", "LBA"],
       "correctAnswer": 2,
-      "marks": 2
+      "marks": 2,
+      "explanation": "Turing Machine is most powerful."
     },
     {
-      "question": "BST search complexity?",
-      "options": ["O(1)","O(n)","O(log n)","O(n²)"],
+      "subject": "TOC",
+      "question": "FA memory?",
+      "options": ["Infinite", "Stack", "None", "Tape"],
       "correctAnswer": 2,
-      "marks": 1
+      "marks": 1,
+      "explanation": "Finite automata has no memory."
     },
     {
-      "question": "Scanner phase?",
-      "options": ["Lexical","Syntax","Semantic","Code"],
-      "correctAnswer": 0,
-      "marks": 1
-    },
-    {
-      "question": "MOV R1,[2000] is?",
-      "options": ["Immediate","Register","Direct","Indirect"],
-      "correctAnswer": 2,
-      "marks": 1
-    },
-    {
-      "question": "Determinant zero means?",
-      "options": ["Identity","Singular","Non-singular","Orthogonal"],
+      "subject": "Algorithms",
+      "question": "Binary search complexity?",
+      "options": ["O(n)", "O(log n)", "O(n²)", "O(1)"],
       "correctAnswer": 1,
-      "marks": 1
+      "marks": 1,
+      "explanation": "Binary search reduces search space by half."
+    },
+    {
+      "subject": "Algorithms",
+      "question": "Merge sort complexity?",
+      "options": ["O(n)", "O(n log n)", "O(n²)", "O(log n)"],
+      "correctAnswer": 1,
+      "marks": 1,
+      "explanation": "Merge sort has O(n log n) complexity."
+    },
+    {
+      "subject": "COA",
+      "question": "Register is?",
+      "options": ["Memory", "CPU storage", "Disk", "Cache"],
+      "correctAnswer": 1,
+      "marks": 1,
+      "explanation": "Registers are small fast CPU storage."
+    },
+    {
+      "subject": "COA",
+      "question": "Cache memory is?",
+      "options": ["Slow", "Fast", "External", "None"],
+      "correctAnswer": 1,
+      "marks": 1,
+      "explanation": "Cache is faster than RAM."
+    },
+    {
+      "subject": "Maths",
+      "question": "Determinant zero means?",
+      "options": ["Identity", "Singular", "Orthogonal", "None"],
+      "correctAnswer": 1,
+      "marks": 1,
+      "explanation": "Zero determinant → singular matrix."
     }
+
   ]
 }
