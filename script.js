@@ -12,16 +12,22 @@ function showScreen(screenId) {
   document.getElementById(screenId).classList.add('active');
 }
 
-// 1. DYNAMIC DATA FETCHING
-fetch('questions.json')
-  .then(res => res.json())
-  .then(data => {
-    // Randomize and pick 10 questions to make every test feel different
-    quizData = data.sort(() => 0.5 - Math.random()).slice(0, 10);
-    userAnswers = new Array(quizData.length).fill(null);
-  })
-  .catch(err => console.error("Could not load questions. Did you create questions.json?", err));
+// PUTTING THE ARRAY BACK IN THE FILE DIRECTLY
+let quizData = [
+  { "question": "Which layer of the OSI model is responsible for node-to-node delivery of a frame?", "options": ["Physical", "Network", "Transport", "Data Link"], "correct": 3 },
+  { "question": "In Operating Systems, 'Thrashing' is primarily caused by which of the following?", "options": ["High CPU utilization", "Lack of memory & excessive paging", "Deadlock state", "Too many I/O devices"], "correct": 1 },
+  { "question": "Which model/machine has the highest computational power?", "options": ["Finite Automata", "Pushdown Automata", "Turing Machine", "Linear Bounded"], "correct": 2 },
+  { "question": "In a relational database, which normal form deals with transitive dependencies?", "options": ["1NF", "2NF", "3NF", "BCNF"], "correct": 2 },
+  { "question": "Which data structure is typically used by the compiler to check for balanced parentheses?", "options": ["Queue", "Stack", "Tree", "Array"], "correct": 1 },
+  { "question": "What is the time complexity to find the shortest path using Dijkstra's algorithm with a binary heap?", "options": ["O(V^2)", "O(E log V)", "O(V log E)", "O(E + V)"], "correct": 1 },
+  { "question": "In the TCP/IP suite, which protocol is used to map a known IP address to a MAC address?", "options": ["RARP", "DHCP", "ARP", "DNS"], "correct": 2 },
+  { "question": "An operating system uses the Banker's algorithm. What is it primarily used for?", "options": ["Deadlock Prevention", "Deadlock Avoidance", "Deadlock Detection", "Memory Allocation"], "correct": 1 },
+  { "question": "Which of the following problems is known to be undecidable?", "options": ["Membership for regular languages", "The Halting Problem for Turing machines", "Finiteness for context-free languages", "Emptiness for finite automata"], "correct": 1 },
+  { "question": "What is the maximum number of nodes in a binary tree of height 'h'? (Assume root is at height 0)", "options": ["2^h", "2^(h+1) - 1", "2^h - 1", "h^2"], "correct": 1 }
+];
 
+// Initialize the user answers array now that the data exists
+let userAnswers = new Array(quizData.length).fill(null);
 // 2. AUTHENTICATION SYSTEM
 document.getElementById('toSignup').onclick = () => {
   document.getElementById('login-box').classList.add('hidden');
