@@ -1,64 +1,157 @@
-body{
-  margin:0;
-  font-family:sans-serif;
-  background:#030712;
-  color:white;
+/* Core Variables for Theme */
+:root {
+  --bg-color: #0d1117;
+  --card-bg: #161b22;
+  --text-main: #f0f6fc;
+  --text-muted: #8b949e;
+  --accent: #7c4dff;
+  --accent-hover: #9965f4;
+  --border-color: #30363d;
+  --success: #2ea44f;
 }
 
-.header{
-  display:flex;
-  justify-content:space-between;
-  padding:15px;
-  background:#020617;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.screen{display:none;}
-.screen.active{display:block;}
-
-.login-screen{
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
 }
 
-.auth-container{
-  background:#111;
-  padding:30px;
-  border-radius:10px;
-  text-align:center;
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #010409;
+  border-bottom: 1px solid var(--border-color);
 }
 
-input{
-  display:block;
-  width:90%;
-  margin:10px auto;
-  padding:10px;
+/* Screens Toggle System */
+.screen {
+  display: none; /* Hidden by default */
+  min-height: calc(100vh - 70px);
+  padding: 20px;
 }
 
-button{
-  padding:10px;
-  margin:10px;
-  cursor:pointer;
+.screen.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.hidden{display:none;}
-
-.card{
-  margin:40px auto;
-  padding:20px;
-  width:300px;
-  background:#111;
-  border-radius:10px;
+.hidden {
+  display: none !important;
 }
 
-.option{
-  padding:10px;
-  margin:5px 0;
-  background:#222;
-  cursor:pointer;
+/* Reusable Card UI */
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 30px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
 }
 
-.option.selected{
-  background:#7c4dff;
+.center {
+  text-align: center;
+}
+
+/* Forms (Login/Signup) */
+.form-box h2 { margin-bottom: 20px; }
+.form-box p { margin-top: 15px; color: var(--text-muted); }
+.form-box span { color: var(--accent); cursor: pointer; text-decoration: underline; }
+
+input {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  background-color: #0d1117;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: white;
+  font-size: 16px;
+}
+
+input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+/* Buttons */
+button {
+  background-color: var(--border-color);
+  color: var(--text-main);
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+button:hover { background-color: #444d56; }
+
+button.btn-accent, #loginBtn, #signupBtn {
+  background-color: var(--accent);
+  width: 100%;
+}
+
+button.btn-accent:hover, #loginBtn:hover, #signupBtn:hover {
+  background-color: var(--accent-hover);
+}
+
+/* Quiz UI elements */
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-muted);
+  margin-bottom: 15px;
+}
+
+#question { margin-bottom: 25px; }
+
+.options-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.option-btn {
+  text-align: left;
+  background-color: #21262d;
+  border: 1px solid var(--border-color);
+}
+
+.option-btn:hover { background-color: #30363d; }
+
+.option-btn.selected {
+  border-color: var(--accent);
+  background-color: rgba(124, 77, 255, 0.1);
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.nav button { width: 48%; }
+
+/* Chart Sizing */
+.chart-container {
+  width: 100%;
+  max-width: 300px;
+  margin: 20px auto;
 }
