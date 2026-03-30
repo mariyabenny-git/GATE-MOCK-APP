@@ -8,7 +8,6 @@
   --border-color: #30363d;
   --success: #2ea44f;
   --danger: #da363c;
-  --warning: #d29922;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -61,8 +60,8 @@ button {
   cursor: pointer; font-weight: 600; transition: all 0.2s ease;
 }
 button:hover { background-color: #444d56; }
-button.btn-accent, #loginBtn, #signupBtn { background-color: var(--accent); width: 100%; }
-button.btn-accent:hover, #loginBtn:hover, #signupBtn:hover { background-color: var(--accent-hover); }
+button.btn-accent { background-color: var(--accent); }
+button.btn-accent:hover { background-color: var(--accent-hover); }
 
 /* Score History UI */
 #history-section { margin: 15px 0; padding: 10px; background: #0d1117; border-radius: 6px; }
