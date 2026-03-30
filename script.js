@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 let allQuestions=[], selectedQuestions=[];
 let answers=[], marked=[], visited=[];
 let current=0, time=1800, timer;
+let isLoaded=false;
 
 let timePerQuestion = Array(10).fill(0);
 let lastTime = Date.now();
@@ -20,12 +21,11 @@ const timerEl=document.getElementById("timer");
 fetch("questions.json")
 .then(res=>res.json())
 .then(data=>{
-  data.subjects.forEach(sub=>{
-    sub.questions.forEach(q=>{
-      q.subject=sub.name;
-      allQuestions.push(q);
-    });
-  });
+  if(data.questions){
+    allQuestions = data.questions;
+  }
+  isLoaded=true;
+  startBtn.textContent="Start Test";
 });
 
 /* UI */
@@ -36,7 +36,7 @@ function show(id){
 
 /* START */
 startBtn.onclick=()=>{
-  if(allQuestions.length===0){
+  if(!isLoaded){
     alert("Loading...");
     return;
   }
@@ -61,25 +61,21 @@ function startTimer(){
     time--;
     let m=Math.floor(time/60);
     let s=time%60;
-    timerEl.textContent=`${m}:${s<10?"0":""}${s}`;
+    timerEl.textContent=`${m}:${s.toString().padStart(2,'0')}`;
     if(time<=0) finish();
   },1000);
 }
 
-/* LOAD Q */
+/* LOAD QUESTION */
 function loadQ(){
   let now=Date.now();
   timePerQuestion[current]+= (now-lastTime)/1000;
   lastTime=now;
 
   let q=selectedQuestions[current];
-  if(!q) return;
-
   visited[current]=true;
 
-  document.getElementById("progress").innerHTML =
-    `<span style="color:#c084fc">${q.subject}</span> • Q ${current+1}/10`;
-
+  document.getElementById("progress").textContent=`Q ${current+1}/10`;
   document.getElementById("question").textContent=q.question;
 
   let html="";
@@ -93,8 +89,7 @@ function loadQ(){
 
 /* SELECT */
 window.select=(i)=>{
-  if(answers[current]!=null) return;
-  answers[current]=i;
+  answers[current]=i; // FIXED
   loadQ();
 };
 
@@ -124,16 +119,12 @@ function finish(){
   clearInterval(timer);
   show("result");
 
-  let score=0, correct=0, wrong=0, skipped=0, stats={};
+  let score=0, correct=0, wrong=0, skipped=0;
 
   selectedQuestions.forEach((q,i)=>{
-    if(!stats[q.subject]) stats[q.subject]={c:0,t:0};
-    stats[q.subject].t++;
-
     if(answers[i]===q.correctAnswer){
       score+=q.marks;
       correct++;
-      stats[q.subject].c++;
     }
     else if(answers[i]===null){
       skipped++;
@@ -146,18 +137,13 @@ function finish(){
 
   let percent=Math.max(0,Math.round((score/20)*100));
 
-  document.getElementById("scoreText").textContent=
-    `Score: ${score} | ${percent}%`;
+  document.getElementById("scoreText").textContent=`Score: ${score} | ${percent}%`;
+  document.getElementById("rankText").textContent=`AIR: ${Math.floor((100-percent)/100*50000)}`;
 
-  let history=JSON.parse(localStorage.getItem("scores"))||[];
-  history.push(percent);
-  localStorage.setItem("scores",JSON.stringify(history));
-
-  let rank=Math.floor((100-percent)/100*50000);
-  document.getElementById("rankText").textContent=`AIR: ${rank}`;
-
-  drawDonut(correct,wrong,skipped);
-  drawTimeGraph();
+  setTimeout(()=>{
+    drawDonut(correct,wrong,skipped);
+    drawTimeGraph();
+  },100);
 }
 
 /* DONUT */
@@ -166,7 +152,6 @@ function drawDonut(c,w,s){
   let total=c+w+s;
   let data=[c,w,s];
   let colors=["#34d399","#f87171","#475569"];
-
   let start=0;
 
   data.forEach((val,i)=>{
@@ -196,6 +181,14 @@ function drawTimeGraph(){
     ctx.fillRect(i*30,180-h,20,h);
   });
 }
+
+/* ANTI CHEAT */
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden){
+    alert("Cheating detected!");
+    finish();
+  }
+});
 
 /* EXIT */
 exitBtn.onclick=()=>location.reload();
