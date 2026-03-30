@@ -1,126 +1,168 @@
-let currentUser = null;
-let questions = [];
-let selected = [];
-let answers = [];
-let current = 0;
-
-/* SCREEN SWITCH */
-function show(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-}
-
-/* AUTH */
-function toggleAuth(){
-  document.getElementById("login-box").classList.toggle("hidden");
-  document.getElementById("signup-box").classList.toggle("hidden");
-}
-
-function handleSignUp(){
-  let u = document.getElementById("signup-username").value;
-  let p = document.getElementById("signup-password").value;
-
-  if(!u || !p) return alert("Fill all");
-
-  if(localStorage.getItem(u)){
-    alert("User exists");
-    return;
+// 1. DUMMY DATA (Simulating GATE questions)
+const quizData = [
+  {
+    question: "OSI Layer responsible for node-to-node reliability?",
+    options: ["Physical", "Network", "Transport", "Data Link"],
+    correct: 3 // Data Link is node-to-node (Transport is end-to-end)
+  },
+  {
+    question: "Thrashing means?",
+    options: ["Excess paging", "Deadlock state", "CPU idling", "Memory full"],
+    correct: 0
+  },
+  {
+    question: "Which model has the highest computational power?",
+    options: ["Finite Automata", "Pushdown Automata", "Turing Machine", "Linear Bounded"],
+    correct: 2
   }
+];
 
-  localStorage.setItem(u,p);
-  alert("Account created");
-  toggleAuth();
+// 2. APP STATE
+let currentQuestionIndex = 0;
+let userAnswers = new Array(quizData.length).fill(null);
+let currentUsername = "";
+
+// 3. DOM ELEMENTS
+const authScreen = document.getElementById('auth');
+const startScreen = document.getElementById('start');
+const quizScreen = document.getElementById('quiz');
+const resultScreen = document.getElementById('result');
+
+// 4. NAVIGATION FUNCTION
+function showScreen(screen) {
+  [authScreen, startScreen, quizScreen, resultScreen].forEach(s => s.classList.remove('active'));
+  screen.classList.add('active');
 }
 
-function handleLogin(){
-  let u = document.getElementById("login-username").value;
-  let p = document.getElementById("login-password").value;
-
-  let stored = localStorage.getItem(u);
-
-  if(!stored) alert("User not found");
-  else if(stored !== p) alert("Wrong password");
-  else{
-    currentUser = u;
-    localStorage.setItem("currentUser",u);
-    document.getElementById("userText").textContent=u;
-    loadHistory();
-    show("start");
-  }
-}
-
-/* LOGOUT */
-document.getElementById("logoutBtn").onclick=()=>{
-  localStorage.removeItem("currentUser");
-  location.reload();
+// 5. AUTHENTICATION LOGIC
+document.getElementById('toSignup').onclick = () => {
+  document.getElementById('login-box').classList.add('hidden');
+  document.getElementById('signup-box').classList.remove('hidden');
 };
 
-/* HISTORY */
-function loadHistory(){
-  let data = JSON.parse(localStorage.getItem(currentUser+"_scores")) || [];
-  document.getElementById("history").textContent =
-    data.length ? "Scores: "+data.join(", ") : "No attempts yet";
-}
-
-/* QUESTIONS */
-fetch("questions.json")
-.then(res=>res.json())
-.then(data=>{questions=data.questions;});
-
-/* START */
-document.getElementById("startBtn").onclick=()=>{
-  selected=[...questions].sort(()=>Math.random()-0.5).slice(0,10);
-  answers=Array(10).fill(null);
-  current=0;
-  show("quiz");
-  loadQ();
+document.getElementById('toLogin').onclick = () => {
+  document.getElementById('signup-box').classList.add('hidden');
+  document.getElementById('login-box').classList.remove('hidden');
 };
 
-function loadQ(){
-  let q=selected[current];
-  document.getElementById("progress").textContent=`Q ${current+1}/10`;
-  document.getElementById("question").textContent=q.question;
+document.getElementById('signupBtn').onclick = () => {
+  const user = document.getElementById('signup-username').value.trim();
+  const pass = document.getElementById('signup-password').value.trim();
+  if (!user || !pass) return alert("Fill all fields");
+  
+  localStorage.setItem(user, pass);
+  alert("Account created! Logging you in...");
+  loginUser(user);
+};
 
-  let html="";
-  q.options.forEach((o,i)=>{
-    html+=`<div class="option ${answers[current]==i?'selected':''}" onclick="select(${i})">${o}</div>`;
-  });
+document.getElementById('loginBtn').onclick = () => {
+  const user = document.getElementById('login-username').value.trim();
+  const pass = document.getElementById('login-password').value.trim();
+  const storedPass = localStorage.getItem(user);
+  
+  if (storedPass && storedPass === pass) {
+    loginUser(user);
+  } else {
+    alert("Invalid credentials!");
+  }
+};
 
-  document.getElementById("options").innerHTML=html;
+function loginUser(username) {
+  currentUsername = username;
+  document.getElementById('userText').innerText = username;
+  document.getElementById('logoutBtn').classList.remove('hidden');
+  showScreen(startScreen);
 }
 
-function select(i){
-  answers[current]=i;
-  loadQ();
+document.getElementById('logoutBtn').onclick = () => location.reload();
+
+// 6. QUIZ LOGIC
+document.getElementById('startBtn').onclick = () => {
+  currentQuestionIndex = 0;
+  userAnswers.fill(null);
+  showScreen(quizScreen);
+  loadQuestion();
+};
+
+function loadQuestion() {
+  const currentData = quizData[currentQuestionIndex];
+  document.getElementById('progress').innerText = `Question ${currentQuestionIndex + 1} of ${quizData.length}`;
+  document.getElementById('question').innerText = currentData.question;
+  
+  const optionsDiv = document.getElementById('options');
+  optionsDiv.innerHTML = "";
+  
+  currentData.options.forEach((option, index) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    if (userAnswers[currentQuestionIndex] === index) btn.classList.add('selected');
+    btn.innerText = option;
+    
+    btn.onclick = () => {
+      userAnswers[currentQuestionIndex] = index;
+      loadQuestion(); // Refresh styles to show selected
+    };
+    
+    optionsDiv.appendChild(btn);
+  });
 }
 
-document.getElementById("nextBtn").onclick=()=>{ if(current<9){current++; loadQ();}};
-document.getElementById("prevBtn").onclick=()=>{ if(current>0){current--; loadQ();}};
+document.getElementById('prevBtn').onclick = () => {
+  if (currentQuestionIndex > 0) {
+    currentQuestionIndex--;
+    loadQuestion();
+  }
+};
 
-/* SUBMIT */
-document.getElementById("submitBtn").onclick=()=>{
-  let correct=0;
+document.getElementById('nextBtn').onclick = () => {
+  if (currentQuestionIndex < quizData.length - 1) {
+    currentQuestionIndex++;
+    loadQuestion();
+  }
+};
 
-  selected.forEach((q,i)=>{
-    if(answers[i]==q.correctAnswer) correct++;
+document.getElementById('submitBtn').onclick = () => {
+  let score = 0;
+  let skipped = 0;
+  
+  quizData.forEach((q, i) => {
+    if (userAnswers[i] === q.correct) score++;
+    else if (userAnswers[i] === null) skipped++;
   });
+  
+  const wrong = quizData.length - score - skipped;
+  
+  document.getElementById('scoreText').innerText = `You scored ${score} out of ${quizData.length}`;
+  showScreen(resultScreen);
+  drawChart(score, wrong, skipped);
+};
 
-  document.getElementById("scoreText").textContent=`Score: ${correct}/10`;
+document.getElementById('restartBtn').onclick = () => showScreen(startScreen);
 
-  let data = JSON.parse(localStorage.getItem(currentUser+"_scores")) || [];
-  data.push(correct);
-  localStorage.setItem(currentUser+"_scores",JSON.stringify(data));
-
-  new Chart(document.getElementById("chart"),{
-    type:"doughnut",
-    data:{
-      labels:["Correct","Wrong"],
-      datasets:[{
-        data:[correct,10-correct],
-        backgroundColor:["green","red"]
+// 7. CHART.JS INTEGRATION
+function drawChart(correct, wrong, skipped) {
+  const ctx = document.getElementById('chart').getContext('2d');
+  
+  // Destroy old chart instance if existing to prevent overlaps
+  if (window.myChart) window.myChart.destroy();
+  
+  window.myChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Correct', 'Wrong', 'Skipped'],
+      datasets: [{
+        data: [correct, wrong, skipped],
+        backgroundColor: ['#2ea44f', '#da363c', '#8b949e'],
+        borderColor: '#161b22',
+        borderWidth: 2
       }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#f0f6fc' } }
+      }
     }
   });
-
-  show("result");
-};
+}
+;
