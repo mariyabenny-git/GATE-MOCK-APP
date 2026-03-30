@@ -1,40 +1,24 @@
-// 1. DUMMY DATA (Simulating GATE questions)
 const quizData = [
-  {
-    question: "OSI Layer responsible for node-to-node reliability?",
-    options: ["Physical", "Network", "Transport", "Data Link"],
-    correct: 3 // Data Link is node-to-node (Transport is end-to-end)
-  },
-  {
-    question: "Thrashing means?",
-    options: ["Excess paging", "Deadlock state", "CPU idling", "Memory full"],
-    correct: 0
-  },
-  {
-    question: "Which model has the highest computational power?",
-    options: ["Finite Automata", "Pushdown Automata", "Turing Machine", "Linear Bounded"],
-    correct: 2
-  }
+  { question: "OSI Layer responsible for node-to-node reliability?", options: ["Physical", "Network", "Transport", "Data Link"], correct: 3 },
+  { question: "Thrashing means?", options: ["Excess paging", "Deadlock state", "CPU idling", "Memory full"], correct: 0 },
+  { question: "Which model has the highest computational power?", options: ["Finite Automata", "Pushdown Automata", "Turing Machine", "Linear Bounded"], correct: 2 }
 ];
 
-// 2. APP STATE
+// STATE VARIABLES
 let currentQuestionIndex = 0;
 let userAnswers = new Array(quizData.length).fill(null);
+let timePerQuestion = 30; // Seconds allowed per question
+let timeLeft = timePerQuestion;
+let timerInterval = null;
 let currentUsername = "";
 
-// 3. DOM ELEMENTS
-const authScreen = document.getElementById('auth');
-const startScreen = document.getElementById('start');
-const quizScreen = document.getElementById('quiz');
-const resultScreen = document.getElementById('result');
-
-// 4. NAVIGATION FUNCTION
-function showScreen(screen) {
-  [authScreen, startScreen, quizScreen, resultScreen].forEach(s => s.classList.remove('active'));
-  screen.classList.add('active');
+// NAVIGATION
+function showScreen(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
 }
 
-// 5. AUTHENTICATION LOGIC
+// AUTH
 document.getElementById('toSignup').onclick = () => {
   document.getElementById('login-box').classList.add('hidden');
   document.getElementById('signup-box').classList.remove('hidden');
@@ -49,9 +33,7 @@ document.getElementById('signupBtn').onclick = () => {
   const user = document.getElementById('signup-username').value.trim();
   const pass = document.getElementById('signup-password').value.trim();
   if (!user || !pass) return alert("Fill all fields");
-  
   localStorage.setItem(user, pass);
-  alert("Account created! Logging you in...");
   loginUser(user);
 };
 
@@ -60,31 +42,32 @@ document.getElementById('loginBtn').onclick = () => {
   const pass = document.getElementById('login-password').value.trim();
   const storedPass = localStorage.getItem(user);
   
-  if (storedPass && storedPass === pass) {
-    loginUser(user);
-  } else {
-    alert("Invalid credentials!");
-  }
+  if (storedPass && storedPass === pass) loginUser(user);
+  else alert("Invalid credentials!");
 };
 
 function loginUser(username) {
   currentUsername = username;
   document.getElementById('userText').innerText = username;
   document.getElementById('logoutBtn').classList.remove('hidden');
-  showScreen(startScreen);
+  showScreen('start');
 }
 
 document.getElementById('logoutBtn').onclick = () => location.reload();
 
-// 6. QUIZ LOGIC
+// QUIZ & TIMER
 document.getElementById('startBtn').onclick = () => {
   currentQuestionIndex = 0;
   userAnswers.fill(null);
-  showScreen(quizScreen);
+  showScreen('quiz');
   loadQuestion();
 };
 
 function loadQuestion() {
+  clearInterval(timerInterval); // Stop previous question's clock
+  timeLeft = timePerQuestion;   // Reset clock
+  updateTimerUI();
+
   const currentData = quizData[currentQuestionIndex];
   document.getElementById('progress').innerText = `Question ${currentQuestionIndex + 1} of ${quizData.length}`;
   document.getElementById('question').innerText = currentData.question;
@@ -100,11 +83,39 @@ function loadQuestion() {
     
     btn.onclick = () => {
       userAnswers[currentQuestionIndex] = index;
-      loadQuestion(); // Refresh styles to show selected
+      loadQuestion(); // Refresh visual selection
     };
-    
     optionsDiv.appendChild(btn);
   });
+
+  // Start the ticking clock for THIS question
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerUI();
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      moveToNextQuestion(); // Auto-skips when time expires
+    }
+  }, 1000);
+}
+
+function updateTimerUI() {
+  document.getElementById('timer-text').innerText = `00:${timeLeft < 10 ? '0' + timeLeft : timeLeft}`;
+  const percentage = (timeLeft / timePerQuestion) * 100;
+  document.getElementById('timer-bar').style.width = `${percentage}%`;
+  
+  // Visual alert: Turn bar red when under 10 seconds
+  document.getElementById('timer-bar').style.backgroundColor = timeLeft <= 10 ? 'var(--danger)' : 'var(--accent)';
+}
+
+function moveToNextQuestion() {
+  if (currentQuestionIndex < quizData.length - 1) {
+    currentQuestionIndex++;
+    loadQuestion();
+  } else {
+    clearInterval(timerInterval);
+    alert("Time ran out for the final question! Please submit.");
+  }
 }
 
 document.getElementById('prevBtn').onclick = () => {
@@ -121,7 +132,15 @@ document.getElementById('nextBtn').onclick = () => {
   }
 };
 
+// SKIP BUTTON FUNCTIONALITY
+document.getElementById('skipBtn').onclick = () => {
+  userAnswers[currentQuestionIndex] = null; // Forces "skipped" state
+  moveToNextQuestion();
+};
+
+// SUBMIT & CHARTS
 document.getElementById('submitBtn').onclick = () => {
+  clearInterval(timerInterval);
   let score = 0;
   let skipped = 0;
   
@@ -131,19 +150,15 @@ document.getElementById('submitBtn').onclick = () => {
   });
   
   const wrong = quizData.length - score - skipped;
-  
   document.getElementById('scoreText').innerText = `You scored ${score} out of ${quizData.length}`;
-  showScreen(resultScreen);
-  drawChart(score, wrong, skipped);
+  showScreen('result');
+  
+  drawDoughnutChart(score, wrong, skipped);
+  drawLeaderboardChart(score);
 };
 
-document.getElementById('restartBtn').onclick = () => showScreen(startScreen);
-
-// 7. CHART.JS INTEGRATION
-function drawChart(correct, wrong, skipped) {
+function drawDoughnutChart(correct, wrong, skipped) {
   const ctx = document.getElementById('chart').getContext('2d');
-  
-  // Destroy old chart instance if existing to prevent overlaps
   if (window.myChart) window.myChart.destroy();
   
   window.myChart = new Chart(ctx, {
@@ -159,10 +174,61 @@ function drawChart(correct, wrong, skipped) {
     },
     options: {
       responsive: true,
+      plugins: { legend: { position: 'bottom', labels: { color: '#f0f6fc' } } }
+    }
+  });
+}
+
+// 8. SIMULATED PEER COMPARISON LEADERBOARD
+function drawLeaderboardChart(userScore) {
+  const ctx = document.getElementById('leaderboardChart').getContext('2d');
+  if (window.leaderboard) window.leaderboard.destroy();
+
+  // Simulated peer data
+  const peers = [
+    { name: "Arjun", mark: 3 },
+    { name: "Sneha", mark: 2 },
+    { name: "Rahul", mark: 1 }
+  ];
+
+  // Add current user to list and sort
+  peers.push({ name: currentUsername, mark: userScore });
+  peers.sort((a, b) => b.mark - a.mark);
+
+  const labels = peers.map(p => p.name);
+  const marks = peers.map(p => p.mark);
+
+  window.leaderboard = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Marks Scored',
+        data: marks,
+        // Highlighting current user in purple, peers in gray
+        backgroundColor: labels.map(l => l === currentUsername ? '#7c4dff' : '#30363d'),
+        borderRadius: 5
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { color: '#8b949e', stepSize: 1 },
+          grid: { color: '#21262d' }
+        },
+        x: {
+          ticks: { color: '#8b949e' },
+          grid: { display: false }
+        }
+      },
       plugins: {
-        legend: { position: 'bottom', labels: { color: '#f0f6fc' } }
+        legend: { display: false } // Hide label box
       }
     }
   });
 }
-;
+
+document.getElementById('restartBtn').onclick = () => showScreen('start');
