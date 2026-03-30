@@ -1,4 +1,6 @@
-:root {
+body {
+  background: red !important;
+}:root {
     --bg: #030712;
     --card: rgba(17, 24, 39, 0.7);
     --border: rgba(255, 255, 255, 0.08);
@@ -41,10 +43,13 @@ body {
 /* CARD */
 .card{
     background:var(--card);
-    backdrop-filter:blur(20px);
     border:1px solid var(--border);
     border-radius:20px;
     padding:30px;
+
+    /* optional glass effect */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 }
 
 /* QUESTION */
