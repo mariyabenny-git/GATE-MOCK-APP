@@ -7,8 +7,8 @@
   --accent-hover: #9965f4;
   --border-color: #30363d;
   --success: #2ea44f;
-  --warning: #d29922;
   --danger: #da363c;
+  --warning: #d29922;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -49,54 +49,27 @@ body {
 .form-box span { color: var(--accent); cursor: pointer; text-decoration: underline; }
 
 input {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 15px;
-  background-color: #0d1117;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  color: white;
-  font-size: 16px;
+  display: block; width: 100%; padding: 12px; margin-bottom: 15px;
+  background-color: #0d1117; border: 1px solid var(--border-color);
+  border-radius: 6px; color: white; font-size: 16px;
 }
-
 input:focus { border-color: var(--accent); outline: none; }
 
 button {
-  background-color: var(--border-color);
-  color: var(--text-main);
-  border: none;
-  padding: 12px 20px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s ease;
+  background-color: var(--border-color); color: var(--text-main);
+  border: none; padding: 12px 20px; border-radius: 6px;
+  cursor: pointer; font-weight: 600; transition: all 0.2s ease;
 }
-
 button:hover { background-color: #444d56; }
 button.btn-accent, #loginBtn, #signupBtn { background-color: var(--accent); width: 100%; }
 button.btn-accent:hover, #loginBtn:hover, #signupBtn:hover { background-color: var(--accent-hover); }
 
-/* Warning Button for Skip */
-.btn-warning { background-color: transparent; border: 1px solid var(--warning); color: var(--warning); }
-.btn-warning:hover { background-color: rgba(210, 153, 34, 0.1); }
+/* Score History UI */
+#history-section { margin: 15px 0; padding: 10px; background: #0d1117; border-radius: 6px; }
 
-/* "Air Rack" Per-Question Timer */
-.timer-wrapper {
-  width: 100%;
-  height: 6px;
-  background-color: #21262d;
-  border-radius: 3px;
-  overflow: hidden;
-  margin-bottom: 15px;
-}
-
-#timer-bar {
-  height: 100%;
-  width: 100%;
-  background-color: var(--accent);
-  transition: width 1s linear;
-}
+/* Timer "Air Rack" */
+.timer-wrapper { width: 100%; height: 6px; background: #21262d; border-radius: 3px; overflow: hidden; margin-bottom: 15px; }
+#timer-bar { height: 100%; width: 100%; background: var(--accent); transition: width 1s linear; }
 
 .quiz-header { display: flex; justify-content: space-between; color: var(--text-muted); margin-bottom: 15px; }
 #question { margin-bottom: 25px; }
@@ -107,9 +80,8 @@ button.btn-accent:hover, #loginBtn:hover, #signupBtn:hover { background-color: v
 .option-btn.selected { border-color: var(--accent); background-color: rgba(124, 77, 255, 0.1); }
 
 .nav { display: flex; justify-content: space-between; margin-bottom: 15px; }
-.nav button { width: 30%; } /* Sized for 3 buttons */
+.nav button { width: 48%; }
 
 h3 { margin-top: 25px; margin-bottom: 10px; color: var(--text-muted); }
-
 .chart-container { width: 100%; max-width: 250px; margin: 10px auto; }
 .chart-container.wide { max-width: 500px; height: 200px; }
