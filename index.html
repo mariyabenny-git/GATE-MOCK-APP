@@ -25,7 +25,6 @@
           <button id="loginBtn">Login</button>
           <p>New user? <span id="toSignup">Sign up</span></p>
         </div>
-
         <div id="signup-box" class="form-box hidden">
           <h2>Create Account</h2>
           <input id="signup-username" placeholder="Username">
@@ -46,9 +45,13 @@
 
     <section id="quiz" class="screen">
       <div class="card quiz-card">
+        <div class="timer-wrapper">
+          <div id="timer-bar"></div>
+        </div>
+
         <div class="quiz-header">
           <p id="progress">Question 1 of 3</p>
-          <div id="timer">30:00</div>
+          <div id="timer-text">00:30</div>
         </div>
         
         <h2 id="question">Loading question...</h2>
@@ -56,6 +59,7 @@
 
         <div class="nav">
           <button id="prevBtn">Prev</button>
+          <button id="skipBtn" class="btn-warning">Skip</button>
           <button id="nextBtn">Next</button>
         </div>
 
@@ -70,6 +74,11 @@
         
         <div class="chart-container">
           <canvas id="chart"></canvas>
+        </div>
+
+        <h3>Leaderboard Comparison</h3>
+        <div class="chart-container wide">
+          <canvas id="leaderboardChart"></canvas>
         </div>
         
         <button id="restartBtn" class="btn-accent">Restart Practice</button>
