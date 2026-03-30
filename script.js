@@ -2,11 +2,15 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 let allQuestions=[], selectedQuestions=[];
 let answers=[], marked=[], visited=[];
-let current=0, time=1800, timer;
+let current=0;
 
 const startBtn=document.getElementById("startBtn");
-const explainBtn=document.getElementById("explainBtn");
+const nextBtn=document.getElementById("nextBtn");
+const prevBtn=document.getElementById("prevBtn");
+const markBtn=document.getElementById("markBtn");
+const submitBtn=document.getElementById("submitBtn");
 
+/* LOAD */
 fetch("questions.json")
 .then(res=>res.json())
 .then(data=>{
@@ -14,29 +18,35 @@ fetch("questions.json")
   startBtn.textContent="Start Test";
 });
 
+/* SHOW */
+function show(id){
+  document.querySelectorAll(".screen")
+    .forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
 /* START */
 startBtn.onclick=()=>{
-  selectedQuestions=[...allQuestions].sort(()=>Math.random()-0.5).slice(0,10);
+  selectedQuestions=[...allQuestions]
+    .sort(()=>Math.random()-0.5)
+    .slice(0,10);
 
   answers=Array(10).fill(null);
   marked=Array(10).fill(false);
+  visited=Array(10).fill(false);
 
+  current=0;
   show("quiz");
-  startTimer();
   loadQ();
 };
-
-function show(id){
-  document.querySelectorAll(".screen").forEach(s=>s.style.display="none");
-  document.getElementById(id).style.display="block";
-}
 
 /* LOAD Q */
 function loadQ(){
   let q=selectedQuestions[current];
+  visited[current]=true;
 
   document.getElementById("progress").innerHTML=
-  `Question <b>${current+1}</b> of 10`;
+    `Q ${current+1}/10`;
 
   document.getElementById("question").textContent=q.question;
 
@@ -46,6 +56,7 @@ function loadQ(){
   });
 
   document.getElementById("options").innerHTML=html;
+  updatePalette();
 }
 
 /* SELECT */
@@ -57,87 +68,85 @@ window.select=(i)=>{
 /* NAV */
 nextBtn.onclick=()=>{ if(current<9){current++; loadQ();}};
 prevBtn.onclick=()=>{ if(current>0){current--; loadQ();}};
+markBtn.onclick=()=>{ marked[current]=!marked[current]; updatePalette();};
 
-/* TIMER */
-function startTimer(){
-  timer=setInterval(()=>{
-    time--;
-    let m=Math.floor(time/60);
-    let s=time%60;
-    timerEl.textContent=`${m}:${s}`;
-    if(time<=0) finish();
-  },1000);
+/* PALETTE */
+function updatePalette(){
+  let html="";
+  for(let i=0;i<10;i++){
+    let cls="gray";
+    if(marked[i]) cls="purple";
+    else if(answers[i]!=null) cls="green";
+    else if(visited[i]) cls="red";
+
+    html+=`<div class="${cls}" onclick="go(${i})">${i+1}</div>`;
+  }
+  document.getElementById("palette").innerHTML=html;
 }
 
-/* FINISH */
-submitBtn.onclick=finish;
+window.go=(i)=>{ current=i; loadQ(); };
 
-function finish(){
-  clearInterval(timer);
+/* FINISH */
+submitBtn.onclick=()=>{
   show("result");
 
-  let correct=0, wrong=0, skipped=0;
-  let subjectStats={};
+  let correct=0, wrong=0, stats={};
 
   selectedQuestions.forEach((q,i)=>{
-    if(!subjectStats[q.subject]) subjectStats[q.subject]={c:0,t:0};
-    subjectStats[q.subject].t++;
+    if(!stats[q.subject]) stats[q.subject]={c:0,t:0};
+    stats[q.subject].t++;
 
     if(answers[i]===q.correctAnswer){
       correct++;
-      subjectStats[q.subject].c++;
-    }
-    else if(answers[i]==null) skipped++;
-    else wrong++;
+      stats[q.subject].c++;
+    } else wrong++;
   });
 
   document.getElementById("scoreText").textContent=
-  `Correct: ${correct} | Wrong: ${wrong}`;
+    `Score: ${correct}/10`;
 
-  /* WEAK AREA */
   let weak="";
-  Object.keys(subjectStats).forEach(sub=>{
-    let acc=subjectStats[sub].c/subjectStats[sub].t;
-    if(acc<0.5) weak+=sub+" ";
+  Object.keys(stats).forEach(s=>{
+    if(stats[s].c/stats[s].t<0.5) weak+=s+" ";
   });
 
   document.getElementById("weakText").textContent=
-  `Weak Areas: ${weak}`;
+    weak ? "Weak: "+weak : "None yet! Keep practicing 💪";
 
-  drawCharts(correct,wrong,skipped);
+  drawChart(correct,wrong);
   showSolutions();
-}
+};
 
-/* CHARTS */
-function drawCharts(c,w,s){
-
-new Chart(document.getElementById("donutChart"),{
-  type:"doughnut",
-  data:{
-    labels:["Correct","Wrong","Skipped"],
-    datasets:[{data:[c,w,s]}]
-  }
-});
-
+/* CHART */
+function drawChart(c,w){
+  new Chart(document.getElementById("donutChart"),{
+    type:"doughnut",
+    data:{
+      labels:["Correct","Wrong"],
+      datasets:[{
+        data:[c,w],
+        backgroundColor:["#10b981","#ef4444"]
+      }]
+    }
+  });
 }
 
 /* SOLUTIONS */
 function showSolutions(){
   let html="";
   selectedQuestions.forEach((q,i)=>{
-    html+=`
-    <div>
-    <b>Q${i+1}</b> ${q.question}<br>
-    ✅ ${q.options[q.correctAnswer]}<br>
-    💡 ${q.explanation}
-    </div>`;
+    if(answers[i]!==q.correctAnswer){
+      html+=`
+      <div class="solution-card">
+      Q${i+1}: ${q.question}<br>
+      ✅ ${q.options[q.correctAnswer]}<br>
+      💡 ${q.explanation}
+      </div>`;
+    }
   });
-  document.getElementById("solutions").innerHTML=html;
-}
 
-/* EXPLAIN BUTTON */
-explainBtn.onclick=()=>{
-  alert("Available after submission");
-};
+  document.getElementById("solutions").innerHTML=
+    html || "Perfect Score 🎉";
+}
 
 });
