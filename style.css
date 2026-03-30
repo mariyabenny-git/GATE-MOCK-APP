@@ -1,4 +1,4 @@
-:root {
+:root{
     --bg:#030712;
     --card:rgba(17,24,39,0.75);
     --border:rgba(255,255,255,0.08);
@@ -16,6 +16,7 @@ body{
     color:#f8fafc;
 }
 
+/* HEADER */
 .header{
     display:flex;
     justify-content:space-between;
@@ -23,9 +24,48 @@ body{
     background:#020617;
 }
 
+/* SCREENS */
 .screen{display:none;}
 .screen.active{display:block;}
 
+/* LOGIN */
+.login-screen{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* CARD */
+.card{
+    background:var(--card);
+    padding:20px;
+    border-radius:15px;
+    border:1px solid var(--border);
+}
+
+/* INPUT */
+.input-field{
+    width:80%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,0.05);
+    color:white;
+}
+
+/* BUTTON */
+button{
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    background:var(--primary);
+    color:white;
+    cursor:pointer;
+}
+
+/* LAYOUT */
 .quiz-container{
     display:grid;
     grid-template-columns:1fr 300px;
@@ -34,18 +74,7 @@ body{
     margin:30px auto;
 }
 
-.card{
-    background:var(--card);
-    padding:20px;
-    border-radius:15px;
-    border:1px solid var(--border);
-}
-
-#question{
-    font-size:20px;
-    font-weight:600;
-}
-
+/* OPTIONS */
 .option{
     padding:15px;
     margin:10px 0;
@@ -63,21 +92,14 @@ body{
     border:2px solid var(--primary);
 }
 
+/* NAV */
 .nav-inside{
     display:flex;
     justify-content:space-between;
     margin-top:20px;
 }
 
-button{
-    padding:10px;
-    border:none;
-    border-radius:10px;
-    background:var(--primary);
-    color:white;
-    cursor:pointer;
-}
-
+/* PALETTE */
 #palette{
     display:grid;
     grid-template-columns:repeat(5,1fr);
@@ -96,11 +118,7 @@ button{
 .green{background:var(--green);}
 .purple{background:var(--primary);}
 
-canvas{
-    margin:20px auto;
-    display:block;
-}
-
+/* GOLDEN CORNER */
 .solution-card{
     background:#111;
     padding:10px;
@@ -108,26 +126,8 @@ canvas{
     border-left:4px solid var(--yellow);
 }
 
-#reviseBtn{
-    background:var(--yellow);
-}
-
+/* MOBILE */
 @media(max-width:900px){
     .quiz-container{grid-template-columns:1fr;}
     .sidebar{display:none;}
-}
-/* LOGIN INPUT */
-input, select{
-    padding:10px;
-    margin:10px 0;
-    border-radius:8px;
-    border:none;
-    width:80%;
-}
-
-/* HISTORY */
-#history{
-    font-size:14px;
-    opacity:0.8;
-    margin-top:10px;
 }
