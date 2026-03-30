@@ -1,87 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GATE Mock Pro</title>
-
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script defer src="script.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GATE Mock Pro</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script defer src="script.js"></script>
 </head>
-
 <body>
 
-<header class="header">
-  <h2>GATE MOCK PRO</h2>
-  <button id="logoutBtn">Logout</button>
-</header>
+  <header class="header">
+    <h2>GATE MOCK PRO</h2>
+    <button id="logoutBtn" class="hidden">Logout</button>
+  </header>
 
-<main>
+  <main>
+    <section id="auth" class="screen active">
+      <div class="auth-container">
+        <div id="login-box" class="form-box">
+          <h2>Welcome Back</h2>
+          <input id="login-username" placeholder="Username">
+          <input id="login-password" type="password" placeholder="Password">
+          <button id="loginBtn">Login</button>
+          <p>New user? <span id="toSignup">Sign up</span></p>
+        </div>
 
-<!-- AUTH -->
-<section id="auth" class="screen active login-screen">
+        <div id="signup-box" class="form-box hidden">
+          <h2>Create Account</h2>
+          <input id="signup-username" placeholder="Username">
+          <input id="signup-password" type="password" placeholder="Password">
+          <button id="signupBtn">Sign Up</button>
+          <p>Already a user? <span id="toLogin">Login</span></p>
+        </div>
+      </div>
+    </section>
 
-<div class="auth-container">
+    <section id="start" class="screen">
+      <div class="card center">
+        <h2>Hello <span id="userText"></span> 👋</h2>
+        <p>Ready to test your GATE knowledge?</p>
+        <button id="startBtn">Start Test</button>
+      </div>
+    </section>
 
-  <!-- LOGIN -->
-  <div id="login-box" class="form-box">
-    <h2>Welcome Back</h2>
-    <input id="login-username" placeholder="Username">
-    <input id="login-password" type="password" placeholder="Password">
-    <button onclick="handleLogin()">Login</button>
-    <p>New user? <span onclick="toggleAuth()">Sign up</span></p>
-  </div>
+    <section id="quiz" class="screen">
+      <div class="card quiz-card">
+        <div class="quiz-header">
+          <p id="progress">Question 1 of 3</p>
+          <div id="timer">30:00</div>
+        </div>
+        
+        <h2 id="question">Loading question...</h2>
+        <div id="options" class="options-container"></div>
 
-  <!-- SIGNUP -->
-  <div id="signup-box" class="form-box hidden">
-    <h2>Create Account</h2>
-    <input id="signup-username" placeholder="Username">
-    <input id="signup-password" type="password" placeholder="Password">
-    <button onclick="handleSignUp()">Sign Up</button>
-    <p>Already user? <span onclick="toggleAuth()">Login</span></p>
-  </div>
+        <div class="nav">
+          <button id="prevBtn">Prev</button>
+          <button id="nextBtn">Next</button>
+        </div>
 
-</div>
-</section>
+        <button id="submitBtn" class="btn-accent">Submit Test</button>
+      </div>
+    </section>
 
-<!-- START -->
-<section id="start" class="screen">
-  <div class="card center">
-    <h2>Hello <span id="userText"></span> 👋</h2>
-
-    <button id="startBtn">Start Test</button>
-    <p id="history"></p>
-  </div>
-</section>
-
-<!-- QUIZ -->
-<section id="quiz" class="screen">
-  <div class="card center">
-    <p id="progress"></p>
-    <h2 id="question"></h2>
-    <div id="options"></div>
-
-    <div class="nav">
-      <button id="prevBtn">Prev</button>
-      <button id="nextBtn">Next</button>
-    </div>
-
-    <button id="submitBtn">Submit</button>
-  </div>
-</section>
-
-<!-- RESULT -->
-<section id="result" class="screen">
-  <div class="card center">
-    <h2>Result</h2>
-    <p id="scoreText"></p>
-    <canvas id="chart"></canvas>
-    <button onclick="location.reload()">Restart</button>
-  </div>
-</section>
-
-</main>
+    <section id="result" class="screen">
+      <div class="card center">
+        <h2>Performance Dashboard</h2>
+        <p id="scoreText"></p>
+        
+        <div class="chart-container">
+          <canvas id="chart"></canvas>
+        </div>
+        
+        <button id="restartBtn" class="btn-accent">Restart Practice</button>
+      </div>
+    </section>
+  </main>
 
 </body>
 </html>
