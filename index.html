@@ -44,6 +44,12 @@
       </div>
 
       <div id="options"></div>
+
+      <div class="nav-inside">
+        <button id="prevBtn">Prev</button>
+        <button id="markBtn">Mark</button>
+        <button id="nextBtn">Next</button>
+      </div>
     </div>
 
     <aside class="card sidebar">
@@ -54,12 +60,6 @@
 
   </div>
 
-  <div class="mobile-nav">
-    <button id="prevBtn">Prev</button>
-    <button id="markBtn">Mark</button>
-    <button id="nextBtn">Next</button>
-  </div>
-
 </section>
 
 <section id="result" class="screen">
@@ -68,11 +68,11 @@
     <h2>Performance Dashboard</h2>
 
     <p id="scoreText"></p>
-    <p id="rankText"></p>
     <p id="weakText"></p>
 
-    <canvas id="donutChart" width="250" height="250"></canvas>
-    <canvas id="timeChart" width="300" height="200"></canvas>
+    <div class="card chart-card">
+      <canvas id="donutChart"></canvas>
+    </div>
 
     <h3>📘 Golden Points</h3>
     <div id="solutions"></div>
