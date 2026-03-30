@@ -1,12 +1,11 @@
 document.addEventListener("DOMContentLoaded",()=>{
 
 let allQuestions=[], selectedQuestions=[];
-let answers=[], marked=[], visited=[];
-let explainList=[];
-let weakIndexes=[];
+let answers=[], visited=[], marked=[];
+let explainList=[], weakIndexes=[];
 let timePerQ=[];
 let current=0;
-let startTime=Date.now();
+let lastTime=Date.now();
 
 const startBtn=document.getElementById("startBtn");
 const nextBtn=document.getElementById("nextBtn");
@@ -21,14 +20,11 @@ const reviseBtn=document.getElementById("reviseBtn");
 /* LOAD */
 fetch("questions.json")
 .then(res=>res.json())
-.then(data=>{
-  allQuestions=data.questions;
-});
+.then(data=>{ allQuestions=data.questions; });
 
 /* SCREEN */
 function show(id){
-  document.querySelectorAll(".screen")
-    .forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
@@ -37,13 +33,14 @@ startBtn.onclick=()=>{
   selectedQuestions=[...allQuestions].sort(()=>Math.random()-0.5).slice(0,10);
 
   answers=Array(10).fill(null);
-  marked=Array(10).fill(false);
   visited=Array(10).fill(false);
+  marked=Array(10).fill(false);
   explainList=[];
+  weakIndexes=[];
   timePerQ=Array(10).fill(0);
 
   current=0;
-  startTime=Date.now();
+  lastTime=Date.now();
 
   show("quiz");
   loadQ();
@@ -52,8 +49,8 @@ startBtn.onclick=()=>{
 /* LOAD Q */
 function loadQ(){
   let now=Date.now();
-  timePerQ[current]+=(now-startTime)/1000;
-  startTime=now;
+  timePerQ[current]+=(now-lastTime)/1000;
+  lastTime=now;
 
   let q=selectedQuestions[current];
   visited[current]=true;
@@ -98,7 +95,7 @@ function updatePalette(){
 }
 window.go=(i)=>{ current=i; loadQ(); };
 
-/* 💡 BULB */
+/* BULB */
 explainBtn.onclick=()=>{
   if(!explainList.includes(current)) explainList.push(current);
 };
@@ -111,14 +108,15 @@ restartBtn.onclick=()=>location.reload();
 submitBtn.onclick=()=>{
   show("result");
 
-  let correct=0, wrong=0;
+  let correct=0, wrong=0, skipped=0;
   let subjectStats={};
 
   selectedQuestions.forEach((q,i)=>{
     if(!subjectStats[q.subject]) subjectStats[q.subject]={c:0,t:0};
     subjectStats[q.subject].t++;
 
-    if(answers[i]===q.correctAnswer){
+    if(answers[i]===null) skipped++;
+    else if(answers[i]===q.correctAnswer){
       correct++;
       subjectStats[q.subject].c++;
     } else {
@@ -127,34 +125,32 @@ submitBtn.onclick=()=>{
     }
   });
 
-  document.getElementById("scoreText").textContent=`Score: ${correct}/10`;
+  document.getElementById("scoreText").textContent=`Score: ${correct}/10 | Skipped: ${skipped}`;
 
-  /* AIR PREDICTION */
-  let percent = (correct/10)*100;
-  let air = Math.floor((100-percent)*500);
+  let percent=(correct/10)*100;
+  let air=Math.floor((100-percent)*500);
   document.getElementById("airText").textContent=`Predicted AIR: ${air}`;
 
-  /* WEAK */
   let weak="";
   Object.keys(subjectStats).forEach(s=>{
     if(subjectStats[s].c/subjectStats[s].t<0.5) weak+=s+" ";
   });
+  document.getElementById("weakText").textContent=weak||"Strong performance";
 
-  document.getElementById("weakText").textContent=
-    weak || "Strong performance 🎯";
-
-  drawCharts(correct,wrong);
+  drawCharts(correct,wrong,skipped);
   showGolden();
 };
 
 /* CHARTS */
-function drawCharts(c,w){
-
+function drawCharts(c,w,s){
   new Chart(document.getElementById("donutChart"),{
     type:"doughnut",
     data:{
-      labels:["Correct","Wrong"],
-      datasets:[{data:[c,w],backgroundColor:["#10b981","#ef4444"]}]
+      labels:["Correct","Wrong","Unattempted"],
+      datasets:[{
+        data:[c,w,s],
+        backgroundColor:["#10b981","#ef4444","#f59e0b"]
+      }]
     }
   });
 
@@ -172,23 +168,20 @@ function showGolden(){
   let html="";
   explainList.forEach(i=>{
     let q=selectedQuestions[i];
-    html+=`
-    <div class="solution-card">
-    Q${i+1}: ${q.question}<br>
-    💡 ${q.explanation}
+    html+=`<div class="solution-card">
+    Q${i+1}: ${q.question}<br>💡 ${q.explanation}
     </div>`;
   });
-  document.getElementById("solutions").innerHTML=
-    html || "No selections made";
+  document.getElementById("solutions").innerHTML=html||"No selections";
 }
 
-/* 🔁 REVISION MODE */
+/* REVISION */
 reviseBtn.onclick=()=>{
-  selectedQuestions = weakIndexes.map(i=>selectedQuestions[i]);
+  selectedQuestions=weakIndexes.map(i=>selectedQuestions[i]);
 
-  answers = Array(selectedQuestions.length).fill(null);
-  marked = Array(selectedQuestions.length).fill(false);
-  visited = Array(selectedQuestions.length).fill(false);
+  answers=Array(selectedQuestions.length).fill(null);
+  visited=Array(selectedQuestions.length).fill(false);
+  marked=Array(selectedQuestions.length).fill(false);
 
   current=0;
   show("quiz");
