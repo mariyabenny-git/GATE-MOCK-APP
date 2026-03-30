@@ -1,24 +1,28 @@
-const quizData = [
-  { question: "OSI Layer responsible for node-to-node reliability?", options: ["Physical", "Network", "Transport", "Data Link"], correct: 3 },
-  { question: "Thrashing means?", options: ["Excess paging", "Deadlock state", "CPU idling", "Memory full"], correct: 0 },
-  { question: "Which model has the highest computational power?", options: ["Finite Automata", "Pushdown Automata", "Turing Machine", "Linear Bounded"], correct: 2 }
-];
-
 // STATE VARIABLES
+let quizData = [];
 let currentQuestionIndex = 0;
-let userAnswers = new Array(quizData.length).fill(null);
-let timePerQuestion = 30; // Seconds allowed per question
-let timeLeft = timePerQuestion;
+let userAnswers = [];
+let timeLeft = 30;
 let timerInterval = null;
 let currentUsername = "";
 
-// NAVIGATION
+// Helper to update screens
 function showScreen(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(screenId).classList.add('active');
 }
 
-// AUTH
+// 1. DYNAMIC DATA FETCHING
+fetch('questions.json')
+  .then(res => res.json())
+  .then(data => {
+    // Randomize and pick 10 questions to make every test feel different
+    quizData = data.sort(() => 0.5 - Math.random()).slice(0, 10);
+    userAnswers = new Array(quizData.length).fill(null);
+  })
+  .catch(err => console.error("Could not load questions. Did you create questions.json?", err));
+
+// 2. AUTHENTICATION SYSTEM
 document.getElementById('toSignup').onclick = () => {
   document.getElementById('login-box').classList.add('hidden');
   document.getElementById('signup-box').classList.remove('hidden');
@@ -33,29 +37,48 @@ document.getElementById('signupBtn').onclick = () => {
   const user = document.getElementById('signup-username').value.trim();
   const pass = document.getElementById('signup-password').value.trim();
   if (!user || !pass) return alert("Fill all fields");
-  localStorage.setItem(user, pass);
-  loginUser(user);
+
+  // Create user profile in localStorage
+  const userData = { password: pass, history: [] };
+  localStorage.setItem(`user_${user}`, JSON.stringify(userData));
+  alert("Account created! Please log in.");
+  document.getElementById('toLogin').click();
 };
 
 document.getElementById('loginBtn').onclick = () => {
   const user = document.getElementById('login-username').value.trim();
   const pass = document.getElementById('login-password').value.trim();
-  const storedPass = localStorage.getItem(user);
+  const storedUser = localStorage.getItem(`user_${user}`);
   
-  if (storedPass && storedPass === pass) loginUser(user);
-  else alert("Invalid credentials!");
+  if (storedUser) {
+    const parsedUser = JSON.parse(storedUser);
+    if (parsedUser.password === pass) {
+      currentUsername = user;
+      loadDashboard();
+    } else { alert("Incorrect password!"); }
+  } else { alert("User not found!"); }
 };
-
-function loginUser(username) {
-  currentUsername = username;
-  document.getElementById('userText').innerText = username;
-  document.getElementById('logoutBtn').classList.remove('hidden');
-  showScreen('start');
-}
 
 document.getElementById('logoutBtn').onclick = () => location.reload();
 
-// QUIZ & TIMER
+// 3. PERSONALIZED USER EXPERIENCE & HISTORY
+function loadDashboard() {
+  document.getElementById('userText').innerText = currentUsername;
+  document.getElementById('logoutBtn').classList.remove('hidden');
+  
+  const userData = JSON.parse(localStorage.getItem(`user_${currentUsername}`));
+  const historyDiv = document.getElementById('history-section');
+  
+  if (userData.history && userData.history.length > 0) {
+    historyDiv.innerHTML = `<strong>Your Past Scores:</strong> ${userData.history.join(', ')}`;
+  } else {
+    historyDiv.innerHTML = "No past scores yet. Take your first test!";
+  }
+  
+  showScreen('start');
+}
+
+// 4. QUIZ ENGINE & NAVIGATION
 document.getElementById('startBtn').onclick = () => {
   currentQuestionIndex = 0;
   userAnswers.fill(null);
@@ -64,8 +87,8 @@ document.getElementById('startBtn').onclick = () => {
 };
 
 function loadQuestion() {
-  clearInterval(timerInterval); // Stop previous question's clock
-  timeLeft = timePerQuestion;   // Reset clock
+  clearInterval(timerInterval);
+  timeLeft = 30;
   updateTimerUI();
 
   const currentData = quizData[currentQuestionIndex];
@@ -81,64 +104,49 @@ function loadQuestion() {
     if (userAnswers[currentQuestionIndex] === index) btn.classList.add('selected');
     btn.innerText = option;
     
+    // 5. ANSWER SELECTION SYSTEM
     btn.onclick = () => {
       userAnswers[currentQuestionIndex] = index;
-      loadQuestion(); // Refresh visual selection
+      loadQuestion(); // Refresh to highlight selection
     };
     optionsDiv.appendChild(btn);
   });
 
-  // Start the ticking clock for THIS question
+  // Per-Question Timer
   timerInterval = setInterval(() => {
     timeLeft--;
     updateTimerUI();
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
-      moveToNextQuestion(); // Auto-skips when time expires
+      moveToNext();
     }
   }, 1000);
 }
 
 function updateTimerUI() {
   document.getElementById('timer-text').innerText = `00:${timeLeft < 10 ? '0' + timeLeft : timeLeft}`;
-  const percentage = (timeLeft / timePerQuestion) * 100;
+  const percentage = (timeLeft / 30) * 100;
   document.getElementById('timer-bar').style.width = `${percentage}%`;
-  
-  // Visual alert: Turn bar red when under 10 seconds
   document.getElementById('timer-bar').style.backgroundColor = timeLeft <= 10 ? 'var(--danger)' : 'var(--accent)';
 }
 
-function moveToNextQuestion() {
+function moveToNext() {
   if (currentQuestionIndex < quizData.length - 1) {
     currentQuestionIndex++;
     loadQuestion();
   } else {
     clearInterval(timerInterval);
-    alert("Time ran out for the final question! Please submit.");
+    alert("Test complete! Please hit submit.");
   }
 }
 
 document.getElementById('prevBtn').onclick = () => {
-  if (currentQuestionIndex > 0) {
-    currentQuestionIndex--;
-    loadQuestion();
-  }
+  if (currentQuestionIndex > 0) { currentQuestionIndex--; loadQuestion(); }
 };
 
-document.getElementById('nextBtn').onclick = () => {
-  if (currentQuestionIndex < quizData.length - 1) {
-    currentQuestionIndex++;
-    loadQuestion();
-  }
-};
+document.getElementById('nextBtn').onclick = moveToNext;
 
-// SKIP BUTTON FUNCTIONALITY
-document.getElementById('skipBtn').onclick = () => {
-  userAnswers[currentQuestionIndex] = null; // Forces "skipped" state
-  moveToNextQuestion();
-};
-
-// SUBMIT & CHARTS
+// 6. SUBMIT & ANALYTICS DASHBOARD
 document.getElementById('submitBtn').onclick = () => {
   clearInterval(timerInterval);
   let score = 0;
@@ -151,12 +159,18 @@ document.getElementById('submitBtn').onclick = () => {
   
   const wrong = quizData.length - score - skipped;
   document.getElementById('scoreText').innerText = `You scored ${score} out of ${quizData.length}`;
-  showScreen('result');
   
+  // Save score to user history
+  const userData = JSON.parse(localStorage.getItem(`user_${currentUsername}`));
+  userData.history.push(score);
+  localStorage.setItem(`user_${currentUsername}`, JSON.stringify(userData));
+  
+  showScreen('result');
   drawDoughnutChart(score, wrong, skipped);
   drawLeaderboardChart(score);
 };
 
+// CHART JS 1: Performance
 function drawDoughnutChart(correct, wrong, skipped) {
   const ctx = document.getElementById('chart').getContext('2d');
   if (window.myChart) window.myChart.destroy();
@@ -168,30 +182,20 @@ function drawDoughnutChart(correct, wrong, skipped) {
       datasets: [{
         data: [correct, wrong, skipped],
         backgroundColor: ['#2ea44f', '#da363c', '#8b949e'],
-        borderColor: '#161b22',
-        borderWidth: 2
+        borderColor: '#161b22', borderWidth: 2
       }]
     },
-    options: {
-      responsive: true,
-      plugins: { legend: { position: 'bottom', labels: { color: '#f0f6fc' } } }
-    }
+    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#f0f6fc' } } } }
   });
 }
 
-// 8. SIMULATED PEER COMPARISON LEADERBOARD
+// CHART JS 2: AIR Mock Leaderboard Prediction
 function drawLeaderboardChart(userScore) {
   const ctx = document.getElementById('leaderboardChart').getContext('2d');
   if (window.leaderboard) window.leaderboard.destroy();
 
-  // Simulated peer data
-  const peers = [
-    { name: "Arjun", mark: 3 },
-    { name: "Sneha", mark: 2 },
-    { name: "Rahul", mark: 1 }
-  ];
-
-  // Add current user to list and sort
+  // Mock peers data
+  const peers = [ { name: "Arjun", mark: 8 }, { name: "Sneha", mark: 6 }, { name: "Rahul", mark: 4 } ];
   peers.push({ name: currentUsername, mark: userScore });
   peers.sort((a, b) => b.mark - a.mark);
 
@@ -203,32 +207,21 @@ function drawLeaderboardChart(userScore) {
     data: {
       labels: labels,
       datasets: [{
-        label: 'Marks Scored',
+        label: 'Marks',
         data: marks,
-        // Highlighting current user in purple, peers in gray
         backgroundColor: labels.map(l => l === currentUsername ? '#7c4dff' : '#30363d'),
         borderRadius: 5
       }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      responsive: true, maintainAspectRatio: false,
       scales: {
-        y: {
-          beginAtZero: true,
-          ticks: { color: '#8b949e', stepSize: 1 },
-          grid: { color: '#21262d' }
-        },
-        x: {
-          ticks: { color: '#8b949e' },
-          grid: { display: false }
-        }
+        y: { beginAtZero: true, ticks: { color: '#8b949e' }, grid: { color: '#21262d' } },
+        x: { ticks: { color: '#8b949e' }, grid: { display: false } }
       },
-      plugins: {
-        legend: { display: false } // Hide label box
-      }
+      plugins: { legend: { display: false } }
     }
   });
 }
 
-document.getElementById('restartBtn').onclick = () => showScreen('start');
+document.getElementById('restartBtn').onclick = () => loadDashboard();
