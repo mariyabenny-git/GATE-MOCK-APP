@@ -17,27 +17,25 @@ const exitBtn=document.getElementById("exitBtn");
 const restartBtn=document.getElementById("restartBtn");
 const timerEl=document.getElementById("timer");
 
-/* LOAD QUESTIONS */
+/* LOAD */
 fetch("questions.json")
 .then(res=>res.json())
 .then(data=>{
-  if(data.questions){
-    allQuestions = data.questions;
-  }
+  allQuestions = data.questions || [];
   isLoaded=true;
   startBtn.textContent="Start Test";
 });
 
-/* SCREEN SWITCH */
+/* SCREEN */
 function show(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-/* START TEST */
+/* START */
 startBtn.onclick=()=>{
   if(!isLoaded){
-    alert("Questions still loading...");
+    alert("Loading...");
     return;
   }
 
@@ -65,12 +63,11 @@ function startTimer(){
     let m=Math.floor(time/60);
     let s=time%60;
     timerEl.textContent=`${m}:${s.toString().padStart(2,'0')}`;
-
     if(time<=0) finish();
   },1000);
 }
 
-/* LOAD QUESTION */
+/* LOAD Q */
 function loadQ(){
 
   let now=Date.now();
@@ -80,13 +77,15 @@ function loadQ(){
   let q=selectedQuestions[current];
   visited[current]=true;
 
-  document.getElementById("progress").textContent=`Q ${current+1}/10`;
+  document.getElementById("progress").innerHTML =
+    `Question <b>${current+1}</b> of <b>10</b>`;
+
   document.getElementById("question").textContent=q.question;
 
   let html="";
   q.options.forEach((opt,i)=>{
     html+=`
-      <div class="option ${answers[current]===i?'selected':''}" 
+      <div class="option ${answers[current]===i?'selected':''}"
            onclick="select(${i})">${opt}</div>`;
   });
 
@@ -94,22 +93,21 @@ function loadQ(){
 
   updatePalette();
 
-  // Disable buttons at edges
   prevBtn.disabled = current === 0;
   nextBtn.disabled = current === 9;
 }
 
-/* SELECT OPTION (AUTO MOVE) */
+/* SELECT */
 window.select=(i)=>{
   answers[current]=i;
   updatePalette();
 
   setTimeout(()=>{
-    if(current < 9){
+    if(current<9){
       current++;
       loadQ();
     }
-  },300);
+  },500);
 };
 
 /* PALETTE */
@@ -134,8 +132,6 @@ window.go=(i)=>{
 
 /* SMART NEXT */
 nextBtn.onclick=()=>{
-
-  // 1. next unanswered
   for(let i=current+1;i<10;i++){
     if(answers[i]===null){
       current=i;
@@ -144,7 +140,6 @@ nextBtn.onclick=()=>{
     }
   }
 
-  // 2. go marked
   for(let i=0;i<10;i++){
     if(marked[i]){
       current=i;
@@ -153,7 +148,6 @@ nextBtn.onclick=()=>{
     }
   }
 
-  // 3. normal next
   if(current<9){
     current++;
     loadQ();
@@ -174,10 +168,9 @@ markBtn.onclick=()=>{
   updatePalette();
 };
 
-/* SUBMIT */
+/* FINISH */
 submitBtn.onclick=finish;
 
-/* FINISH */
 function finish(){
   clearInterval(timer);
   show("result");
@@ -212,25 +205,21 @@ function finish(){
   },100);
 }
 
-/* DONUT CHART */
+/* CHARTS (same) */
 function drawDonut(c,w,s){
   let ctx=document.getElementById("donutChart").getContext("2d");
-
   let total=c+w+s;
   let data=[c,w,s];
   let colors=["#34d399","#f87171","#475569"];
-
   let start=0;
 
   data.forEach((val,i)=>{
     let angle=(val/total)*2*Math.PI;
-
     ctx.beginPath();
     ctx.moveTo(125,125);
     ctx.arc(125,125,100,start,start+angle);
     ctx.fillStyle=colors[i];
     ctx.fill();
-
     start+=angle;
   });
 
@@ -240,10 +229,8 @@ function drawDonut(c,w,s){
   ctx.fill();
 }
 
-/* TIME GRAPH */
 function drawTimeGraph(){
   let ctx=document.getElementById("timeChart").getContext("2d");
-
   let max=Math.max(...timePerQuestion);
 
   timePerQuestion.forEach((t,i)=>{
@@ -253,15 +240,15 @@ function drawTimeGraph(){
   });
 }
 
-/* ANTI-CHEAT */
+/* ANTI CHEAT */
 document.addEventListener("visibilitychange",()=>{
   if(document.hidden){
-    alert("Tab switching detected!");
+    alert("Tab switch detected!");
     finish();
   }
 });
 
-/* EXIT + RESTART */
+/* EXIT */
 exitBtn.onclick=()=>location.reload();
 restartBtn.onclick=()=>location.reload();
 
