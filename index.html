@@ -6,11 +6,9 @@
 <title>GATE Mock Pro</title>
 
 <link rel="stylesheet" href="style.css">
-
-<!-- Premium Font -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
 </head>
+
 <body>
 
 <header class="header">
@@ -25,16 +23,15 @@
 <section id="start" class="screen active">
   <div class="card center">
     <h1>Focus Mode Exam</h1>
-    <button id="startBtn">Start Test</button>
+    <button id="startBtn">Loading...</button>
   </div>
 </section>
 
 <!-- QUIZ -->
 <section id="quiz" class="screen">
-
   <div class="quiz-container">
 
-    <div class="card" id="questionCard">
+    <div class="card">
       <p id="progress"></p>
       <h2 id="question"></h2>
       <div id="options"></div>
@@ -53,7 +50,6 @@
     <button id="markBtn">Mark</button>
     <button id="nextBtn">Next</button>
   </div>
-
 </section>
 
 <!-- RESULT -->
@@ -61,14 +57,11 @@
   <div class="card center">
 
     <h2>Performance Dashboard</h2>
-
     <p id="scoreText"></p>
     <p id="rankText"></p>
 
     <canvas id="donutChart" width="250" height="250"></canvas>
     <canvas id="timeChart" width="300" height="200"></canvas>
-
-    <div id="analysis"></div>
 
     <button id="restartBtn">Restart</button>
 
@@ -76,7 +69,7 @@
 </section>
 
 </main>
-<link rel="stylesheet" href="style.css">
+
 <script defer src="script.js"></script>
 </body>
 </html>
