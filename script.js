@@ -1,19 +1,5 @@
-// STATE VARIABLES
-let quizData = [];
-let currentQuestionIndex = 0;
-let userAnswers = [];
-let timeLeft = 30;
-let timerInterval = null;
-let currentUsername = "";
-
-// Helper to update screens
-function showScreen(screenId) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(screenId).classList.add('active');
-}
-
-// PUTTING THE ARRAY BACK IN THE FILE DIRECTLY
-let quizData = [
+// 1. HARDCODED QUIZ DATA (Fixes local fetch protocol failures)
+const quizData = [
   { "question": "Which layer of the OSI model is responsible for node-to-node delivery of a frame?", "options": ["Physical", "Network", "Transport", "Data Link"], "correct": 3 },
   { "question": "In Operating Systems, 'Thrashing' is primarily caused by which of the following?", "options": ["High CPU utilization", "Lack of memory & excessive paging", "Deadlock state", "Too many I/O devices"], "correct": 1 },
   { "question": "Which model/machine has the highest computational power?", "options": ["Finite Automata", "Pushdown Automata", "Turing Machine", "Linear Bounded"], "correct": 2 },
@@ -26,8 +12,19 @@ let quizData = [
   { "question": "What is the maximum number of nodes in a binary tree of height 'h'? (Assume root is at height 0)", "options": ["2^h", "2^(h+1) - 1", "2^h - 1", "h^2"], "correct": 1 }
 ];
 
-// Initialize the user answers array now that the data exists
+// STATE VARIABLES
+let currentQuestionIndex = 0;
 let userAnswers = new Array(quizData.length).fill(null);
+let timeLeft = 30;
+let timerInterval = null;
+let currentUsername = "";
+
+// Helper to update screens
+function showScreen(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+}
+
 // 2. AUTHENTICATION SYSTEM
 document.getElementById('toSignup').onclick = () => {
   document.getElementById('login-box').classList.add('hidden');
@@ -110,7 +107,7 @@ function loadQuestion() {
     if (userAnswers[currentQuestionIndex] === index) btn.classList.add('selected');
     btn.innerText = option;
     
-    // 5. ANSWER SELECTION SYSTEM
+    // ANSWER SELECTION SYSTEM
     btn.onclick = () => {
       userAnswers[currentQuestionIndex] = index;
       loadQuestion(); // Refresh to highlight selection
@@ -152,7 +149,7 @@ document.getElementById('prevBtn').onclick = () => {
 
 document.getElementById('nextBtn').onclick = moveToNext;
 
-// 6. SUBMIT & ANALYTICS DASHBOARD
+// 5. SUBMIT & ANALYTICS DASHBOARD
 document.getElementById('submitBtn').onclick = () => {
   clearInterval(timerInterval);
   let score = 0;
