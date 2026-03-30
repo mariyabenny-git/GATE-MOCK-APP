@@ -1,24 +1,26 @@
 :root {
-    --bg: #030712;
-    --card: rgba(17, 24, 39, 0.7);
-    --border: rgba(255,255,255,0.08);
-    --primary: #8b5cf6;
+    --bg:#030712;
+    --card:rgba(17,24,39,0.7);
+    --border:rgba(255,255,255,0.08);
+    --primary:#8b5cf6;
 }
 
-body {
+body{
     margin:0;
     font-family:'Inter',sans-serif;
-    background:radial-gradient(circle at top right,#1e1b4b,#030712);
+    background:radial-gradient(circle,#1e1b4b,#030712);
     color:#f8fafc;
-    padding-bottom:80px;
 }
 
-.header {
+.header{
     display:flex;
     justify-content:space-between;
-    padding:15px 30px;
+    padding:15px;
     background:#020617;
 }
+
+.screen{display:none;}
+.screen.active{display:block;}
 
 .quiz-container{
     display:grid;
@@ -30,8 +32,8 @@ body {
 
 .card{
     background:var(--card);
-    padding:25px;
-    border-radius:20px;
+    padding:20px;
+    border-radius:15px;
     border:1px solid var(--border);
 }
 
@@ -43,35 +45,59 @@ body {
     cursor:pointer;
 }
 
-.option:hover{background:#111;}
+.option:hover{
+    background:rgba(139,92,246,0.1);
+}
 
-.selected{border-left:4px solid var(--primary);}
+.selected{
+    background:rgba(139,92,246,0.2);
+    border:2px solid var(--primary);
+}
 
-.mobile-nav{
-    position:fixed;
-    bottom:0;
-    width:100%;
+.nav-inside{
     display:flex;
+    justify-content:space-between;
+    margin-top:20px;
 }
 
-.mobile-nav button{
-    flex:1;
-    padding:15px;
-    background:var(--primary);
-    border:none;
-}
-
-#solutions{
-    max-height:300px;
-    overflow:auto;
-    text-align:left;
-}
-
-#solutions div{
-    margin:10px 0;
+button{
     padding:10px;
-    background:#111;
+    border:none;
     border-radius:10px;
+    background:var(--primary);
+    color:white;
+    cursor:pointer;
+}
+
+#palette{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:10px;
+}
+
+#palette div{
+    padding:10px;
+    text-align:center;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.gray{background:#6b7280;}
+.red{background:#ef4444;}
+.green{background:#10b981;}
+.purple{background:#8b5cf6;}
+
+.chart-card{
+    max-width:300px;
+    margin:auto;
+}
+
+.solution-card{
+    background:#111;
+    padding:10px;
+    margin:10px 0;
+    border-left:4px solid #ef4444;
+    border-radius:8px;
 }
 
 @media(max-width:900px){
